@@ -35,7 +35,6 @@ namespace CarRent.Source
             {
                 Log.CloseAndFlush();
             }
-            // CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

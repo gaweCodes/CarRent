@@ -1,6 +1,6 @@
 ﻿namespace CarRent.Source.CustomerManagement.Domain
 {
-    public class Contract
+    public class Customer
     {
     }
 }
