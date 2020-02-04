@@ -10,16 +10,21 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-- task: UseDotNet@2
+- task: NuGetToolInstaller@1
   inputs:
-    packageType: 'sdk'
-    version: '3.1.101'
-- task: DotNetCoreCLI@2
+    versionSpec: 
+- 
+- task: NuGetCommand@2
   inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtefactStagingDirectory)'
-
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+- task: VSBuild@1
+  inputs:
+    solution: '**\*.sln'
+    vsVersion: '16.0'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artefactstagingdirectory)"'
+    configuration: 'Release'
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'PublishProfile'
