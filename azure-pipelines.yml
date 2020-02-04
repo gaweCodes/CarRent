@@ -25,4 +25,4 @@ steps:
     ConnectionType: 'PublishProfile'
     PublishProfilePath: '$(System.DefaultWorkingDirectory)/**/*.pubxml'
     PublishProfilePassword: 'QtKbcz63ec65p6WqcGtlYAL1eYLKdjrrpBCysYiGg9kPEimu0Td0xwjtKrZA'
-    packageForLinux: '$(Build.ArtefactStagingDirectory)/**/*.zip)'
+    packageForLinux: '$(Build.ArtefactStagingDirectory)/**/*.zip'
