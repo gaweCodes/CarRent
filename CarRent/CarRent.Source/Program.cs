@@ -24,7 +24,6 @@ namespace CarRent.Source
             {
                 CreateHostBuilder(args)
                     .Build()
-                    // .Migrate<LaborDatDbContext>()
                     .Run();
             }
             catch (Exception ex)
