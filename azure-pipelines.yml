@@ -7,19 +7,22 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.101'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
     publishWebProjects: true
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtefactStagingDirectory)'
-- task: AzureRMWebAppDeployment@4
+
+- task: AzureRmWebAppDeployment@4
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure for Students(41318ea6-1a92-4f63-9c98-46042db474c2)'
-    appType: 'webAppLinux'
-    WebAppName: 'carrent-gawe'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-    
+    ConnectionType: 'PublishProfile'
+    PublishProfilePath: '$(System.DefaultWorkingDirectory)/**/*.pubxml'
+    PublishProfilePassword: 'QtKbcz63ec65p6WqcGtlYAL1eYLKdjrrpBCysYiGg9kPEimu0Td0xwjtKrZA'
+    packageForLinux: '$(Build.ArtefactStagingDirectory)/**/*.zip'
