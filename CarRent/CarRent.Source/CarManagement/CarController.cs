@@ -9,7 +9,7 @@ namespace CarRent.Source.CarManagement
         [HttpGet]
         public string Get()
         {
-            return "adsf";
+            return "Das ist ein test";
         }
     }
 }
