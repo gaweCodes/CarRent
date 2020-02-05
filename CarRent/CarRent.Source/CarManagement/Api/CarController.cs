@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CarRent.Source.CarManagement
+namespace CarRent.Source.CarManagement.Api
 {
     [Route("api/[controller]")]
     [ApiController]
