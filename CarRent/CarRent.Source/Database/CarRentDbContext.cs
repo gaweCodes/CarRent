@@ -6,23 +6,28 @@ namespace CarRent.Source.Database
     public class CarRentDbContext : DbContext
     {
         public CarRentDbContext(DbContextOptions options) : base(options) { }
-        public DbSet<Car> Cars { get; set; }
-        public DbSet<Type> Types { get; set; }
+        // public DbSet<Car> Cars { get; set; }
+        // public DbSet<Type> Types { get; set; }
         public DbSet<Brand> Brands { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<Car>(c =>
+            builder.Entity<Brand>(c =>
+            {
+                c.HasKey(x => x.Id);
+                // c.HasMany<Reservation>().WithOne().HasForeignKey(r => r.CarId).OnDelete(DeleteBehavior.Cascade);
+                // c.HasMany<RentalContract>().WithOne().HasForeignKey(rc => rc.CarId).OnDelete(DeleteBehavior.Cascade);
+                // c.HasOne<Type>().WithMany();
+            });
+            /*builder.Entity<Car>(c =>
             {
                 c.HasKey(x => x.Id);
                 c.HasOne<CarClass>().WithMany();
                 // c.HasMany<Reservation>().WithOne().HasForeignKey(r => r.CarId).OnDelete(DeleteBehavior.Cascade);
                 // c.HasMany<RentalContract>().WithOne().HasForeignKey(rc => rc.CarId).OnDelete(DeleteBehavior.Cascade);
-                c.HasOne<Type>().WithMany();
+                // c.HasOne<Type>().WithMany();
                 c.HasOne<Brand>().WithMany();
-            });
-
+            });*/
             /*builder.Entity<Customer>(c =>
             {
                 c.HasKey(x => x.Id);

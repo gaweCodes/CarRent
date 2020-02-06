@@ -17,20 +17,25 @@ namespace CarRent.Source.Common
         public async Task<T> GetAsync(Guid id) => await _dbContext.FindAsync<T>(id);
         public async Task<T> AddAsync(T obj)
         {
-            await _dbContext.AddAsync<T>(obj);
+            await _dbContext.AddAsync(obj);
             await _dbContext.SaveChangesAsync();
             return obj;
         }
         public async Task DeleteAsync(Guid id)
         {
             var obj = await GetAsync(id);
-            _dbContext.Remove<T>(obj);
+            _dbContext.Remove(obj);
             await _dbContext.SaveChangesAsync();
         }
         public async Task UpdateAsync(T obj)
         {
-            _dbContext.Update<T>(obj);
+            _dbContext.Update(obj);
             await _dbContext.SaveChangesAsync();
+        }
+        public async Task<bool> ExistAsync(Guid id)
+        {
+            var foundObject = await _dbContext.FindAsync<T>(id);
+            return foundObject != null;
         }
     }
 }

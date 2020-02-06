@@ -11,5 +11,6 @@ namespace CarRent.Source.Common
         Task<T> AddAsync(T obj);
         Task DeleteAsync(Guid id);
         Task UpdateAsync(T obj);
+        Task<bool> ExistAsync(Guid id);
     }
 }

@@ -1,3 +1,6 @@
+using CarRent.Source.CarManagement.Domain;
+using CarRent.Source.CarManagement.Services;
+using CarRent.Source.Common;
 using CarRent.Source.Database;
 using CarRent.Source.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +25,8 @@ namespace CarRent.Source
             {
                 options.UseMySql(Configuration.GetConnectionString("CarRentDb"));
             }, ServiceLifetime.Transient);
+            services.AddScoped<IRepository<Brand>, DatabaseRepository<Brand>>();
+            services.AddScoped<IBrandService, BrandService>();
             services.AddControllers();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
