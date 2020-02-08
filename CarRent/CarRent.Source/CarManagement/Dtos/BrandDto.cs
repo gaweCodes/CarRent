@@ -4,7 +4,7 @@ namespace CarRent.Source.CarManagement.Dtos
 {
     public class BrandDto
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         public string Title { get; set; }
     }
 }

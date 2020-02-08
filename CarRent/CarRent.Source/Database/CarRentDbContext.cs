@@ -12,13 +12,6 @@ namespace CarRent.Source.Database
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<Brand>(c =>
-            {
-                c.HasKey(x => x.Id);
-                // c.HasMany<Reservation>().WithOne().HasForeignKey(r => r.CarId).OnDelete(DeleteBehavior.Cascade);
-                // c.HasMany<RentalContract>().WithOne().HasForeignKey(rc => rc.CarId).OnDelete(DeleteBehavior.Cascade);
-                // c.HasOne<Type>().WithMany();
-            });
             /*builder.Entity<Car>(c =>
             {
                 c.HasKey(x => x.Id);
