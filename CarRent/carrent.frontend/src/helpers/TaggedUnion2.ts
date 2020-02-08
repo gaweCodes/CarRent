@@ -1,30 +1,8 @@
 import { IMatchCases } from './IMatchCases';
 import { ITaggedUnion2 } from './ITaggedUnion2';
-
-abstract class TaggedUnion2State {
-  public readonly isFirst: boolean = false;
-  public readonly isSecond: boolean = false;
-}
-
-class First<T1> extends TaggedUnion2State {
-  public readonly isFirst: boolean = true;
-  public readonly firstState: T1;
-
-  constructor(firstState: T1) {
-    super();
-    this.firstState = firstState;
-  }
-}
-
-class Second<T2> extends TaggedUnion2State {
-  public readonly isSecond: boolean = true;
-  public readonly secondState: T2;
-
-  constructor(secondState: T2) {
-    super();
-    this.secondState = secondState;
-  }
-}
+import { TaggedUnion2State } from './TaggedUnion/TaggedUnion2State';
+import { First } from './TaggedUnion/First2';
+import { Second } from './TaggedUnion/Second2';
 
 interface IResultMatchCases<T1, T2> extends IMatchCases {
   firstFunc: (firstState: T1) => any;
@@ -32,6 +10,13 @@ interface IResultMatchCases<T1, T2> extends IMatchCases {
 }
 
 export class TaggedUnion2<T1, T2> implements ITaggedUnion2<T1, T2> {
+  public static first<T1, T2>(firstState: T1) {
+    return new TaggedUnion2<T1, T2>(new First<T1>(firstState));
+  }
+  public static second<T1, T2>(secondState: T2) {
+    return new TaggedUnion2<T1, T2>(new Second<T2>(secondState));
+  }
+
   private state: TaggedUnion2State;
 
   private constructor(state: TaggedUnion2State) {
@@ -81,13 +66,5 @@ export class TaggedUnion2<T1, T2> implements ITaggedUnion2<T1, T2> {
       return (this.state as Second<T2>).secondState;
     }
     throw new Error('TaggedUnion2 is not in Second state');
-  }
-
-  // static constructors
-  public static first<T1, T2>(firstState: T1) {
-    return new TaggedUnion2<T1, T2>(new First<T1>(firstState));
-  }
-  public static second<T1, T2>(secondState: T2) {
-    return new TaggedUnion2<T1, T2>(new Second<T2>(secondState));
   }
 }

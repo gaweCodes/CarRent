@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue';
 import Brand from '@/views/Brand.vue';
 import Category from '@/views/Category.vue';
 import CarModel from '@/views/CarModel.vue';
+import Car from '@/views/Car.vue';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/model',
     name: 'model',
     component: CarModel
+  },
+  {
+    path: '/car',
+    name: 'car',
+    component: Car
   }
 ];
 

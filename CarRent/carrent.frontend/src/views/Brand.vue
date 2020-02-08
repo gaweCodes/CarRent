@@ -56,7 +56,7 @@ import { IBrand } from '@/models/IBrand';
 export default Vue.extend({
   components: { Loading, Alert },
   data() {
-    return { brandRd: RemoteData.notAsked<IBrand, Error>(), newBrand: {} as IBrand };
+    return { brandRd: RemoteData.notAsked<IBrand[], Error>(), newBrand: {} as IBrand };
   },
   created() {
     this.loadData();
@@ -66,10 +66,10 @@ export default Vue.extend({
       axios
         .get('/api/brand')
         .then(res => {
-          this.brandRd = RemoteData.success<IBrand, Error>(res.data);
+          this.brandRd = RemoteData.success<IBrand[], Error>(res.data);
         })
         .catch(e => {
-          this.brandRd = RemoteData.failure<IBrand, Error>(e);
+          this.brandRd = RemoteData.failure<IBrand[], Error>(e);
         });
     },
     async add() {

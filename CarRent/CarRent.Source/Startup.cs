@@ -33,6 +33,9 @@ namespace CarRent.Source
             services.AddScoped<ICrudService<CarCategory>, CrudService<CarCategory>>();
             services.AddScoped<IRepository<CarModel>, DatabaseRepository<CarModel>>();
             services.AddScoped<ICrudService<CarModel>, CrudService<CarModel>>();
+            services.AddScoped<IRepository<Car>, DatabaseRepository<Car>>();
+            services.AddScoped<ICrudService<Car>, CrudService<Car>>();
+
             services.AddAutoMapper(config =>
             {
                 config.CreateMap<Brand, BrandDto>();
@@ -41,6 +44,8 @@ namespace CarRent.Source
                 config.CreateMap<CarCategoryDto, CarCategory>();
                 config.CreateMap<CarModel, CarModelDto>();
                 config.CreateMap<CarModelDto, CarModel>();
+                config.CreateMap<Car, CarDto>();
+                config.CreateMap<CarDto, Car>();
             }, AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
         }

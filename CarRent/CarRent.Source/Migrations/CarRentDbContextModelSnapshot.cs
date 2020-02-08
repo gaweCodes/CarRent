@@ -41,8 +41,9 @@ namespace CarRent.Source.Migrations
                     b.Property<Guid>("CarModelid")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("CarNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("CarNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 

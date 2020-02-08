@@ -69,7 +69,7 @@ export default Vue.extend({
   components: { Loading, Alert },
   data() {
     return {
-      categoryRd: RemoteData.notAsked<ICarCategory, Error>(),
+      categoryRd: RemoteData.notAsked<ICarCategory[], Error>(),
       newCategory: {} as ICarCategory
     };
   },
@@ -81,10 +81,10 @@ export default Vue.extend({
       axios
         .get('/api/carcategory')
         .then(res => {
-          this.categoryRd = RemoteData.success<ICarCategory, Error>(res.data);
+          this.categoryRd = RemoteData.success<ICarCategory[], Error>(res.data);
         })
         .catch(e => {
-          this.categoryRd = RemoteData.failure<ICarCategory, Error>(e);
+          this.categoryRd = RemoteData.failure<ICarCategory[], Error>(e);
         });
     },
     async add() {

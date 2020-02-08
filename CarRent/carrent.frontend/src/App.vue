@@ -4,7 +4,8 @@
       <router-link to="/">Home</router-link>&nbsp;|
       <router-link to="/brand">Marken</router-link>&nbsp;|
       <router-link to="/category">Kategorien</router-link>&nbsp;|
-      <router-link to="/model">Modelle</router-link>
+      <router-link to="/model">Modelle</router-link>&nbsp;|
+      <router-link to="/car">Autos</router-link>
     </div>
     <router-view />
   </div>

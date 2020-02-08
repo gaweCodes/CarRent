@@ -14,7 +14,7 @@
     <loading
       v-if="modelRd.isLoading() || modelRd.isNotAsked() || brandRd.isLoading() || brandRd.isNotAsked() || categoryRd.isLoading() || categoryRd.isNotAsked()"
     />
-    <div v-else-if="modelRd.hasData() || brandRd.hasData() || categoryRd.hasData()">
+    <div v-if="modelRd.hasData() && brandRd.hasData() && categoryRd.hasData()">
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
@@ -112,9 +112,9 @@ export default Vue.extend({
   components: { Loading, Alert },
   data() {
     return {
-      modelRd: RemoteData.notAsked<ICarModel, Error>(),
-      brandRd: RemoteData.notAsked<IBrand, Error>(),
-      categoryRd: RemoteData.notAsked<ICarCategory, Error>(),
+      modelRd: RemoteData.notAsked<ICarModel[], Error>(),
+      brandRd: RemoteData.notAsked<IBrand[], Error>(),
+      categoryRd: RemoteData.notAsked<ICarCategory[], Error>(),
       newModel: {} as ICarModel
     };
   },
@@ -128,30 +128,30 @@ export default Vue.extend({
       axios
         .get('/api/carcategory')
         .then(res => {
-          this.categoryRd = RemoteData.success<ICarCategory, Error>(res.data);
+          this.categoryRd = RemoteData.success<ICarCategory[], Error>(res.data);
         })
         .catch(e => {
-          this.categoryRd = RemoteData.failure<ICarCategory, Error>(e);
+          this.categoryRd = RemoteData.failure<ICarCategory[], Error>(e);
         });
     },
     loadBrands() {
       axios
         .get('/api/brand')
         .then(res => {
-          this.brandRd = RemoteData.success<IBrand, Error>(res.data);
+          this.brandRd = RemoteData.success<IBrand[], Error>(res.data);
         })
         .catch(e => {
-          this.brandRd = RemoteData.failure<IBrand, Error>(e);
+          this.brandRd = RemoteData.failure<IBrand[], Error>(e);
         });
     },
     loadData() {
       axios
         .get('/api/carModel')
         .then(res => {
-          this.modelRd = RemoteData.success<ICarModel, Error>(res.data);
+          this.modelRd = RemoteData.success<ICarModel[], Error>(res.data);
         })
         .catch(e => {
-          this.modelRd = RemoteData.failure<ICarModel, Error>(e);
+          this.modelRd = RemoteData.failure<ICarModel[], Error>(e);
         });
     },
     async add() {

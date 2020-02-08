@@ -1,41 +1,9 @@
 import { IMatchCases } from './IMatchCases';
 import { ITaggedUnion3 } from './ITaggedUnion3';
-
-abstract class TaggedUnion3State {
-  public readonly isFirst: boolean = false;
-  public readonly isSecond: boolean = false;
-  public readonly isThird: boolean = false;
-}
-
-class First<T1> extends TaggedUnion3State {
-  public readonly isFirst: boolean = true;
-  public readonly firstState: T1;
-
-  constructor(firstState: T1) {
-    super();
-    this.firstState = firstState;
-  }
-}
-
-class Second<T2> extends TaggedUnion3State {
-  public readonly isSecond: boolean = true;
-  public readonly secondState: T2;
-
-  constructor(secondState: T2) {
-    super();
-    this.secondState = secondState;
-  }
-}
-
-class Third<T3> extends TaggedUnion3State {
-  public readonly isThird: boolean = true;
-  public readonly thirdState: T3;
-
-  constructor(thirdState: T3) {
-    super();
-    this.thirdState = thirdState;
-  }
-}
+import { TaggedUnion3State } from './TaggedUnion/TaggedUnion3State';
+import { Third } from './TaggedUnion/Third';
+import { Second } from './TaggedUnion/Second';
+import { First } from './TaggedUnion/First';
 
 interface IResultMatchCases<T1, T2, T3> extends IMatchCases {
   firstFunc: (firstState: T1) => any;
@@ -44,6 +12,16 @@ interface IResultMatchCases<T1, T2, T3> extends IMatchCases {
 }
 
 export class TaggedUnion3<T1, T2, T3> implements ITaggedUnion3<T1, T2, T3> {
+  public static first<T1, T2, T3>(firstState: T1) {
+    return new TaggedUnion3<T1, T2, T3>(new First<T1>(firstState));
+  }
+  public static second<T1, T2, T3>(secondState: T2) {
+    return new TaggedUnion3<T1, T2, T3>(new Second<T2>(secondState));
+  }
+  public static third<T1, T2, T3>(thirdState: T3) {
+    return new TaggedUnion3<T1, T2, T3>(new Third<T3>(thirdState));
+  }
+
   private state: TaggedUnion3State;
 
   private constructor(state: TaggedUnion3State) {
@@ -94,12 +72,10 @@ export class TaggedUnion3<T1, T2, T3> implements ITaggedUnion3<T1, T2, T3> {
       : TaggedUnion3.second<T1, T2, R>((this.state as Second<T2>).secondState);
   }
 
-  // checkers
   public isSecond = () => this.state.isSecond === true;
   public isFirst = () => this.state.isFirst === true;
   public isThird = () => this.state.isThird === true;
 
-  // very "unmonadic" accessors
   public getFirst(): T1 {
     if (this.state.isFirst) {
       return (this.state as First<T1>).firstState;
@@ -119,16 +95,5 @@ export class TaggedUnion3<T1, T2, T3> implements ITaggedUnion3<T1, T2, T3> {
       return (this.state as Third<T3>).thirdState;
     }
     throw new Error('TaggedUnion3 is not in Third state');
-  }
-
-  // static constructors
-  public static first<T1, T2, T3>(firstState: T1) {
-    return new TaggedUnion3<T1, T2, T3>(new First<T1>(firstState));
-  }
-  public static second<T1, T2, T3>(secondState: T2) {
-    return new TaggedUnion3<T1, T2, T3>(new Second<T2>(secondState));
-  }
-  public static third<T1, T2, T3>(thirdState: T3) {
-    return new TaggedUnion3<T1, T2, T3>(new Third<T3>(thirdState));
   }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarRent.Source.Migrations
 {
-    public partial class Init : Migration
+    public partial class CarManagement : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace CarRent.Source.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true)
+                    Title = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,7 +24,7 @@ namespace CarRent.Source.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     DailyFee = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
@@ -37,7 +37,7 @@ namespace CarRent.Source.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: false),
                     BrandId = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false)
                 },
@@ -63,7 +63,7 @@ namespace CarRent.Source.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    CarNumber = table.Column<int>(nullable: false),
+                    CarNumber = table.Column<string>(nullable: false),
                     CarModelid = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>

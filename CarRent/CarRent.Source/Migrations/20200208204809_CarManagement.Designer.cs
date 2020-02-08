@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRent.Source.Migrations
 {
     [DbContext(typeof(CarRentDbContext))]
-    [Migration("20200208162109_Init")]
-    partial class Init
+    [Migration("20200208204809_CarManagement")]
+    partial class CarManagement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,7 @@ namespace CarRent.Source.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -42,8 +43,9 @@ namespace CarRent.Source.Migrations
                     b.Property<Guid>("CarModelid")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("CarNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("CarNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -62,6 +64,7 @@ namespace CarRent.Source.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -82,6 +85,7 @@ namespace CarRent.Source.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");

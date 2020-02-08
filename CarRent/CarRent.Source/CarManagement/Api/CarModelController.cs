@@ -48,7 +48,6 @@ namespace CarRent.Source.CarManagement.Api
             {
                 return BadRequest(e);
             }
-
         }
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CarModelDto carModelDto)
