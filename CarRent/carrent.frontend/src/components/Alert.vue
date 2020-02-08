@@ -1,9 +1,6 @@
 <template functional>
   <div :class="`alert alert-${props.mode || 'danger'} fade show shake-horizontal`" role="alert">
     <slot></slot>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
 </template>
 <script lang="ts">

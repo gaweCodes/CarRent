@@ -3,14 +3,16 @@ using System;
 using CarRent.Source.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRent.Source.Migrations
 {
     [DbContext(typeof(CarRentDbContext))]
-    partial class CarRentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200208162109_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +26,6 @@ namespace CarRent.Source.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -61,7 +62,6 @@ namespace CarRent.Source.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -82,7 +82,6 @@ namespace CarRent.Source.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");

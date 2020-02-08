@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarRent.Source.CarManagement.Domain;
@@ -25,7 +26,9 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-                return _mapper.Map<List<Brand>, List<BrandDto>>(await _brandCrudService.GetAllAsync());
+                var brandList = await _brandCrudService.GetAllAsync();
+                var listToReturn = _mapper.Map<List<Brand>, List<BrandDto>>(brandList).OrderBy(b => b.Title).ToList();
+                return listToReturn;
             }
             catch (Exception e)
             {
@@ -37,7 +40,6 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-
                 var brandDto = _mapper.Map<Brand, BrandDto>(await _brandCrudService.GetByIdAsync(id));
                 if (brandDto == null) return NotFound(null);
                 return brandDto;
@@ -54,7 +56,7 @@ namespace CarRent.Source.CarManagement.Api
             try
             {
                 if (brandDto == null)  return BadRequest($"{nameof(brandDto)} can not not be null!");
-                await _brandCrudService.AddBrandAsync(_mapper.Map<BrandDto, Brand>(brandDto));
+                await _brandCrudService.AddAsync(_mapper.Map<BrandDto, Brand>(brandDto));
                 return Ok();
             }
             catch (Exception e)
@@ -62,23 +64,24 @@ namespace CarRent.Source.CarManagement.Api
                 return BadRequest(e);
             }
         }
-        /*[HttpPut("{id}")]
-        public async Task<ActionResult> UpdateBrand([FromBody] BrandDto brandDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(Guid id, [FromBody] BrandDto brandDto)
         {
             try
             {
-                if (brandDto == null) return BadRequest($"{nameof(brandDto)} can not not be null!");
-                if (await _brandCrudService.CheckIfExistAsync(brandDto.Id) == false) return NotFound(null);
-                await _brandCrudService.UpdateAsync(_mapper.Map<BrandDto, Brand>(brandDto));
+                if (id == Guid.Empty) return NotFound(null);
+                var brand = await _brandCrudService.GetByIdAsync(id);
+                brand.Title = brandDto.Title;
+                await _brandCrudService.UpdateAsync(brand);
                 return Ok();
             }
             catch (Exception e)
             {
                 return BadRequest(e);
             }
-        }*/
+        }
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteBrand(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {

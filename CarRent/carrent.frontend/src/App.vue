@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Home</router-link>&nbsp;|
+      <router-link to="/brand">Marken</router-link>&nbsp;|
+      <router-link to="/category">Kategorien</router-link>&nbsp;|
+      <router-link to="/model">Modelle</router-link>
     </div>
     <router-view />
   </div>
@@ -10,10 +12,9 @@
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: Arial, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
@@ -26,5 +27,18 @@ a {
 }
 a:active {
   color: #42b983;
+}
+fieldset {
+  border: 2px solid;
+  padding: 10px;
+}
+legend {
+  width: 105px;
+}
+button {
+  margin-top: 10px;
+}
+.entry {
+  margin-bottom: 10px;
 }
 </style>

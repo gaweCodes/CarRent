@@ -4,10 +4,8 @@ namespace CarRent.Source.CarManagement.Domain
 {
     public class Car
     {
-        public Guid Id { get; }
-        public int CarNumber { get; }
-        public Brand Brand { get; }
-        public Type Type { get; }
-        public CarClass VehicleClass { get; }
+        public Guid Id { get; set; }
+        public int CarNumber { get; set; }
+        public Guid CarModelid { get; set; }
     }
 }
