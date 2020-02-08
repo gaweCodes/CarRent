@@ -1,5 +1,7 @@
+using System;
+using AutoMapper;
 using CarRent.Source.CarManagement.Domain;
-using CarRent.Source.CarManagement.Services;
+using CarRent.Source.CarManagement.Dtos;
 using CarRent.Source.Common;
 using CarRent.Source.Database;
 using CarRent.Source.Extensions;
@@ -26,7 +28,12 @@ namespace CarRent.Source
                 options.UseMySql(Configuration.GetConnectionString("CarRentDb"));
             }, ServiceLifetime.Transient);
             services.AddScoped<IRepository<Brand>, DatabaseRepository<Brand>>();
-            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<ICrudService<Brand>, CrudService<Brand>>();
+            services.AddAutoMapper(config =>
+            {
+                config.CreateMap<Brand, BrandDto>();
+                config.CreateMap<BrandDto, Brand>();
+            }, AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
