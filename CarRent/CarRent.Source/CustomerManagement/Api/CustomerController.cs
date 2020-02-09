@@ -74,8 +74,6 @@ namespace CarRent.Source.CustomerManagement.Api
                 customer.FirstName = customerDto.FirstName;
                 customer.LastName = customerDto.LastName;
                 customer.Address = customerDto.Address;
-                customer.Mail = customerDto.Mail;
-                customer.PhoneNumber = customerDto.PhoneNumber;
                 await _customerCrudService.UpdateAsync(customer);
                 return Ok();
             }

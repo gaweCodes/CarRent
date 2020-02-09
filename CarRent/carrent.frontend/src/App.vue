@@ -1,12 +1,8 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>&nbsp;|
-      <router-link to="/brand">Marken</router-link>&nbsp;|
-      <router-link to="/category">Kategorien</router-link>&nbsp;|
-      <router-link to="/model">Modelle</router-link>&nbsp;|
-      <router-link to="/car">Autos</router-link>&nbsp;|
-      <router-link to="/customers">Kunden</router-link>
+      <router-link to="/">Sachbearbeiter</router-link>
+&nbsp;|
     </div>
     <router-view />
   </div>

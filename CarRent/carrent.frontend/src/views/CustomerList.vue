@@ -14,18 +14,8 @@
             <label for="newFirstName">Vorname</label>&nbsp;
             <input type="text" id="newFirstName" required v-model="newCustomer.firstName" />&nbsp;
             <label for="newLastName">Nachname</label>&nbsp;
-            <input type="text" id="newLastName" required v-model="newCustomer.lastName" />&nbsp;
-            <label for="newPhone">Telefon</label>&nbsp;
-            <input
-              type="text"
-              id="newPhone"
-              required
-              v-model="newCustomer.phoneNumber"
-              minlength="10"
-              maxlength="12"
-            />&nbsp;
-            <label for="newMail">E-Mail</label>&nbsp;
-            <input type="email" id="newMail" required v-model="newCustomer.mail" />
+            <input type="text" id="newLastName" required v-model="newCustomer.lastName" />
+            <br />
             <label for="newAddress">Adresse</label>
             <br />
             <textarea id="newAddress" rows="3" cols="100" required v-model="newCustomer.address" />
@@ -47,6 +37,9 @@
               class="form-group"
               :style="idx % 2 === 0 ? 'background-color: white;' : 'background-color: lightgray;'"
             >
+              <label>Kundennummer</label>&nbsp;
+              <input class="form-control" type="text" readonly v-model="customer.id" />
+              <br />
               <label :for="customer.id + 'FirstName'">Vorname</label>&nbsp;
               <input
                 type="text"
@@ -62,25 +55,8 @@
                 required
                 v-model="customer.lastName"
                 @input="update(customer)"
-              />&nbsp;
-              <label :for="customer.id + 'Phone'">Telefon</label>&nbsp;
-              <input
-                type="text"
-                :id="customer.id + 'Phone'"
-                required
-                v-model="customer.phoneNumber"
-                minlength="10"
-                maxlength="12"
-                @input="update(customer)"
-              />&nbsp;
-              <label :for="customer.id + 'Mail'">E-Mail</label>&nbsp;
-              <input
-                type="email"
-                :id="customer.id + 'Mail'"
-                required
-                v-model="customer.mail"
-                @input="update(customer)"
               />
+              <br />
               <label :for="customer.id + 'Address'">Adresse</label>
               <br />
               <textarea
@@ -133,8 +109,6 @@ export default Vue.extend({
       if (
         (document.getElementById('newFirstName') as HTMLFormElement).reportValidity() === false ||
         (document.getElementById('newLastName') as HTMLFormElement).reportValidity() === false ||
-        (document.getElementById('newPhone') as HTMLFormElement).reportValidity() === false ||
-        (document.getElementById('newMail') as HTMLFormElement).reportValidity() === false ||
         (document.getElementById('newAddress') as HTMLFormElement).reportValidity() === false
       ) {
         return;
@@ -144,8 +118,6 @@ export default Vue.extend({
       await axios.post('/api/customer', this.newCustomer);
       this.newCustomer.firstName = '';
       this.newCustomer.lastName = '';
-      this.newCustomer.phoneNumber = '';
-      this.newCustomer.mail = '';
       this.newCustomer.address = '';
       this.loadData();
     },
@@ -155,10 +127,6 @@ export default Vue.extend({
           updateObj.id + 'FirstName'
         ) as HTMLFormElement).reportValidity() === false ||
         (document.getElementById(updateObj.id + 'LastName') as HTMLFormElement).reportValidity() ===
-          false ||
-        (document.getElementById(updateObj.id + 'Phone') as HTMLFormElement).reportValidity() ===
-          false ||
-        (document.getElementById(updateObj.id + 'Mail') as HTMLFormElement).reportValidity() ===
           false ||
         (document.getElementById(updateObj.id + 'Address') as HTMLFormElement).reportValidity() ===
           false
