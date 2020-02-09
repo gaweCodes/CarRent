@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CarRent.Source.Common;
 
-namespace CarRent.Source.CustomerManagement.Domain
+namespace CarRent.Source.CustomerManagement.Dtos
 {
-    public class Customer
+    public class CustomerDto
     {
-        [Key]
+        [NotEmpty]
         public Guid Id { get; set; }
         [Required]
         public string FirstName { get; set; }

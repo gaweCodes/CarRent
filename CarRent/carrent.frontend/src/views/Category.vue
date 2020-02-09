@@ -28,8 +28,11 @@
       <div class="col-md-12" v-if="categoryRd.hasData()">
         <fieldset>
           <legend>Übersicht</legend>
-          <div v-for="category in categoryRd.getData()" :key="category.id" class="entry">
-            <div class="form-group">
+          <div v-for="(category, idx) in categoryRd.getData()" :key="category.id" class="entry">
+            <div
+              class="form-group"
+              :style="idx % 2 === 0 ? 'background-color: white;' : 'background-color: lightgray;'"
+            >
               <label :for="category.id + 'Name'">Name</label>&nbsp;
               <input
                 :id="category.id + 'Name'"

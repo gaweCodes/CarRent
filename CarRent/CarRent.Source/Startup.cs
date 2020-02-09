@@ -3,6 +3,8 @@ using AutoMapper;
 using CarRent.Source.CarManagement.Domain;
 using CarRent.Source.CarManagement.Dtos;
 using CarRent.Source.Common;
+using CarRent.Source.CustomerManagement.Domain;
+using CarRent.Source.CustomerManagement.Dtos;
 using CarRent.Source.Database;
 using CarRent.Source.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +37,8 @@ namespace CarRent.Source
             services.AddScoped<ICrudService<CarModel>, CrudService<CarModel>>();
             services.AddScoped<IRepository<Car>, DatabaseRepository<Car>>();
             services.AddScoped<ICrudService<Car>, CrudService<Car>>();
+            services.AddScoped<IRepository<Customer>, DatabaseRepository<Customer>>();
+            services.AddScoped<ICrudService<Customer>, CrudService<Customer>>();
 
             services.AddAutoMapper(config =>
             {
@@ -46,6 +50,9 @@ namespace CarRent.Source
                 config.CreateMap<CarModelDto, CarModel>();
                 config.CreateMap<Car, CarDto>();
                 config.CreateMap<CarDto, Car>();
+
+                config.CreateMap<Customer, CustomerDto>();
+                config.CreateMap<CustomerDto, Customer>();
             }, AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
         }

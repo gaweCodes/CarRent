@@ -21,12 +21,16 @@
         </div>
       </div>
     </div>
+    <br />
     <div class="row">
       <div class="col-md-12" v-if="brandRd.hasData()">
         <fieldset>
           <legend>Übersicht</legend>
-          <div v-for="brand in brandRd.getData()" :key="brand.id" class="entry">
-            <div class="form-group">
+          <div v-for="(brand, idx) in brandRd.getData()" :key="brand.id" class="entry">
+            <div
+              class="form-group"
+              :style="idx % 2 === 0 ? 'background-color: white;' : 'background-color: lightgray;'"
+            >
               <label :for="brand.id">Name</label>&nbsp;
               <input
                 type="text"

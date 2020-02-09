@@ -51,8 +51,11 @@
         <div class="col-md-12">
           <fieldset>
             <legend>Übersicht</legend>
-            <div v-for="carModel in modelRd.getData()" :key="carModel.id" class="entry">
-              <div class="form-group">
+            <div v-for="(carModel, idx) in modelRd.getData()" :key="carModel.id" class="entry">
+              <div
+                class="form-group"
+                :style="idx % 2 === 0 ? 'background-color: white;' : 'background-color: lightgray;'"
+              >
                 <label :for="carModel.id + 'Name'">Name</label>&nbsp;
                 <input
                   :id="carModel.id + 'Name'"

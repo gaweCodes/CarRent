@@ -5,7 +5,8 @@
       <router-link to="/brand">Marken</router-link>&nbsp;|
       <router-link to="/category">Kategorien</router-link>&nbsp;|
       <router-link to="/model">Modelle</router-link>&nbsp;|
-      <router-link to="/car">Autos</router-link>
+      <router-link to="/car">Autos</router-link>&nbsp;|
+      <router-link to="/customers">Kunden</router-link>
     </div>
     <router-view />
   </div>
@@ -41,5 +42,8 @@ button {
 }
 .entry {
   margin-bottom: 10px;
+}
+.form-group {
+  padding: 10px;
 }
 </style>

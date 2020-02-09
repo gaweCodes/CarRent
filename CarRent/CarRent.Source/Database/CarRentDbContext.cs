@@ -1,4 +1,5 @@
 ﻿using CarRent.Source.CarManagement.Domain;
+using CarRent.Source.CustomerManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Source.Database
@@ -10,6 +11,7 @@ namespace CarRent.Source.Database
         public DbSet<CarModel> CarModels { get; set; }
         public DbSet<CarCategory> CarCategories { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -24,7 +26,6 @@ namespace CarRent.Source.Database
             });
             /*builder.Entity<Customer>(c =>
             {
-                c.HasKey(x => x.Id);
                 c.HasMany<Reservation>().WithOne().HasForeignKey(r => r.CustomerId).OnDelete(DeleteBehavior.Restrict);
                 c.HasMany<RentalContract>().WithOne().HasForeignKey(rc => rc.CustomerId).OnDelete(DeleteBehavior.Restrict);
             });
