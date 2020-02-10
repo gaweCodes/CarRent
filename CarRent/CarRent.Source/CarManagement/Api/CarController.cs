@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using CarRent.Source.CarManagement.Domain;
 using CarRent.Source.CarManagement.Dtos;
-using CarRent.Source.Common;
+using CarRent.Source.CarManagement.SearchHelper;
+using CarRent.Source.CarManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.Source.CarManagement.Api
@@ -14,21 +12,17 @@ namespace CarRent.Source.CarManagement.Api
     [ApiController]
     public class CarController : Controller
     {
-        private readonly ICrudService<Car> _carCrudService;
-        private readonly IMapper _mapper;
-        public CarController(ICrudService<Car> carCrudService, IMapper mapper)
+        private readonly ICarService _carService;
+        public CarController(ICarService carService)
         {
-            _carCrudService = carCrudService;
-            _mapper = mapper;
+            _carService = carService;
         }
         [HttpGet]
         public async Task<ActionResult<List<CarDto>>> Get()
         {
             try
             {
-                var carList = await _carCrudService.GetAllAsync();
-                var listToReturn = _mapper.Map<List<Car>, List<CarDto>>(carList).OrderBy(cm => cm.CarNumber).ToList();
-                return listToReturn;
+                return await _carService.GetAllAsync();
             }
             catch (Exception e)
             {
@@ -40,9 +34,8 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-                var carDto = _mapper.Map<Car, CarDto>(await _carCrudService.GetByIdAsync(id));
-                if (carDto == null) return NotFound(null);
-                return carDto;
+                if (id == Guid.Empty) return BadRequest("Id must be a valid Guid");
+                return await _carService.GetByIdAsync(id);
             }
             catch (Exception e)
             {
@@ -55,7 +48,7 @@ namespace CarRent.Source.CarManagement.Api
             try
             {
                 if (carDto == null) return BadRequest($"{nameof(carDto)} can not not be null!");
-                await _carCrudService.AddAsync(_mapper.Map<CarDto, Car>(carDto));
+                await _carService.AddAsync(carDto);
                 return Ok();
             }
             catch (Exception e)
@@ -63,16 +56,12 @@ namespace CarRent.Source.CarManagement.Api
                 return BadRequest(e);
             }
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] CarDto carDto)
+        [HttpPut]
+        public async Task<ActionResult> Update([FromBody] CarDto carDto)
         {
             try
             {
-                if (id == Guid.Empty) return NotFound(null);
-                var car = await _carCrudService.GetByIdAsync(id);
-                car.CarNumber = carDto.CarNumber;
-                car.CarModelid = carDto.CarModelid;
-                await _carCrudService.UpdateAsync(car);
+                await _carService.UpdateAsync(carDto);
                 return Ok();
             }
             catch (Exception e)
@@ -85,9 +74,20 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-                if (await _carCrudService.CheckIfExistAsync(id) == false) return NotFound(null);
-                await _carCrudService.DeleteAsync(id);
+                await _carService.DeleteAsync(id);
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        [HttpGet("search")]
+        public async Task<ActionResult<List<CarDto>>> Search([FromQuery] string carNumber, [FromQuery] Guid? modelId)
+        {
+            try
+            {
+                return await _carService.Search(new CarSearch { CarNumber = carNumber, CarModelid = modelId });
             }
             catch (Exception e)
             {

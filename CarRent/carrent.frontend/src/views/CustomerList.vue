@@ -2,80 +2,141 @@
   <div class="container">
     <h1>Kunden</h1>
     <hr />
-    <loading v-if="customerRd.isLoading()" />
     <alert v-if="customerRd.hasError()">
       <p>{{customerRd.getError()}}</p>
     </alert>
+    <loading v-if="customerRd.isLoading()" />
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="form-group">
           <fieldset>
             <legend>Erstellen</legend>
-            <label for="newFirstName">Vorname</label>&nbsp;
-            <input type="text" id="newFirstName" required v-model="newCustomer.firstName" />&nbsp;
-            <label for="newLastName">Nachname</label>&nbsp;
-            <input type="text" id="newLastName" required v-model="newCustomer.lastName" />
+            <input
+              type="text"
+              id="newFirstName"
+              required
+              v-model="newCustomer.firstName"
+              placeholder="Vorname"
+              class="form-control"
+            />
             <br />
-            <label for="newAddress">Adresse</label>
+            <input
+              type="text"
+              id="newLastName"
+              required
+              v-model="newCustomer.lastName"
+              placeholder="Nachname"
+              class="form-control"
+            />
             <br />
-            <textarea id="newAddress" rows="3" cols="100" required v-model="newCustomer.address" />
+            <textarea
+              id="newAddress"
+              rows="3"
+              cols="100"
+              required
+              v-model="newCustomer.address"
+              placeholder="Adresse"
+              class="form-control"
+            />
             <br />
             <button type="button" class="btn btn-primary" @click="add">
-              <em class="fas fa-plus" /> Erstellen
+              <em class="fas fa-plus" />&nbsp;Erstellen
+            </button>
+          </fieldset>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <fieldset>
+            <legend>Suche</legend>
+            <input
+              type="text"
+              v-model="searchObject.firstName"
+              placeholder="Nach Vornamen suchen"
+              class="form-control"
+            />
+            <br />
+            <input
+              type="text"
+              v-model="searchObject.lastName"
+              placeholder="Nach Nachnamen suchen"
+              class="form-control"
+            />
+            <br />
+            <textarea
+              rows="3"
+              v-model="searchObject.address"
+              placeholder="Nach Adresse suchen"
+              class="form-control"
+            />
+            <br />
+            <button type="button" class="btn btn-primary" @click="search()">
+              <em class="fas fa-search" />&nbsp;Suchen
             </button>
           </fieldset>
         </div>
       </div>
     </div>
     <br />
-    <div class="row">
-      <div class="col-md-12" v-if="customerRd.hasData()">
-        <fieldset>
-          <legend>Übersicht</legend>
-          <div v-for="(customer, idx) in customerRd.getData()" :key="customer.id" class="entry">
-            <div
-              class="form-group"
-              :style="idx % 2 === 0 ? 'background-color: white;' : 'background-color: lightgray;'"
-            >
-              <label>Kundennummer</label>&nbsp;
-              <input class="form-control" type="text" readonly v-model="customer.id" />
-              <br />
-              <label :for="customer.id + 'FirstName'">Vorname</label>&nbsp;
-              <input
-                type="text"
-                :id="customer.id + 'FirstName'"
-                required
-                v-model="customer.firstName"
-                @input="update(customer)"
-              />&nbsp;
-              <label :for="customer.id + 'LastName'">Nachname</label>&nbsp;
-              <input
-                type="text"
-                :id="customer.id + 'LastName'"
-                required
-                v-model="customer.lastName"
-                @input="update(customer)"
-              />
-              <br />
-              <label :for="customer.id + 'Address'">Adresse</label>
-              <br />
-              <textarea
-                :id="customer.id + 'Address'"
-                rows="3"
-                cols="100"
-                required
-                v-model="customer.address"
-                @input="update(customer)"
-              />
-              <br />
-              <button type="button" class="btn btn-danger" @click="remove(customer.id)">
-                <em class="fas fa-trash" />
-              </button>
-            </div>
-          </div>
-        </fieldset>
+    <fieldset v-if="customerRd.hasData()">
+      <legend>Übersicht</legend>
+      <div class="row">
+        <div class="col-md-3">
+          <label>Kunden Nr.</label>
+        </div>
+        <div class="col-md-3">
+          <label>Vorname</label>
+        </div>
+        <div class="col-md-3">
+          <label>Nachname</label>
+        </div>
+        <div class="col-md-3">
+          <label>Adresse</label>
+        </div>
       </div>
-    </div>
+      <div
+        v-for="(customer, idx) in customerRd.getData()"
+        :key="customer.id"
+        :class="idx % 2 === 0 ? 'row entry even' : 'row entry odd'"
+      >
+        <div class="col-md-3 form-group">
+          <input class="form-control" type="text" readonly v-model="customer.id" />
+          <button type="button" class="btn btn-danger" @click="remove(customer.id)">
+            <em class="fas fa-trash" />&nbsp;Löschen
+          </button>
+        </div>
+        <div class="col-md-3 form-group">
+          <input
+            type="text"
+            :id="customer.id + 'FirstName'"
+            required
+            v-model="customer.firstName"
+            class="form-control"
+            @input="update(customer)"
+          />
+        </div>
+        <div class="col-md-3 form-group">
+          <input
+            type="text"
+            :id="customer.id + 'LastName'"
+            required
+            v-model="customer.lastName"
+            class="form-control"
+            @input="update(customer)"
+          />
+        </div>
+        <div>
+          <textarea
+            :id="customer.id + 'Address'"
+            rows="3"
+            required
+            v-model="customer.address"
+            class="form-control"
+            @input="update(customer)"
+          />
+        </div>
+      </div>
+    </fieldset>
   </div>
 </template>
 <script lang="ts">
@@ -89,7 +150,11 @@ import { ICustomer } from '@/models/ICustomer';
 export default Vue.extend({
   components: { Loading, Alert },
   data() {
-    return { customerRd: RemoteData.notAsked<ICustomer[], Error>(), newCustomer: {} as ICustomer };
+    return {
+      customerRd: RemoteData.notAsked<ICustomer[], Error>(),
+      newCustomer: {} as ICustomer,
+      searchObject: { firstName: undefined, lastName: undefined, address: undefined }
+    };
   },
   created() {
     this.loadData();
@@ -116,9 +181,7 @@ export default Vue.extend({
       const uuidv1 = require('uuid/v1');
       this.newCustomer.id = uuidv1();
       await axios.post('/api/customer', this.newCustomer);
-      this.newCustomer.firstName = '';
-      this.newCustomer.lastName = '';
-      this.newCustomer.address = '';
+      this.newCustomer = {} as ICustomer;
       this.loadData();
     },
     async update(updateObj: ICustomer) {
@@ -133,11 +196,73 @@ export default Vue.extend({
       ) {
         return;
       }
-      await axios.put('/api/customer/' + updateObj.id, updateObj);
+      await axios.put('/api/customer', updateObj);
     },
     async remove(id: string) {
       await axios.delete('/api/customer/' + id);
       this.loadData();
+    },
+    search() {
+      let query = '';
+      if (
+        this.searchObject.firstName &&
+        !this.searchObject.lastName &&
+        !this.searchObject.address
+      ) {
+        query = '?firstName=' + this.searchObject.firstName;
+      } else if (
+        !this.searchObject.firstName &&
+        this.searchObject.lastName &&
+        !this.searchObject.address
+      ) {
+        query = '?lastName=' + this.searchObject.lastName;
+      } else if (
+        !this.searchObject.firstName &&
+        !this.searchObject.lastName &&
+        this.searchObject.address
+      ) {
+        query = '?address=' + this.searchObject.address;
+      } else if (
+        this.searchObject.firstName &&
+        this.searchObject.lastName &&
+        !this.searchObject.address
+      ) {
+        query =
+          '?firstName=' + this.searchObject.firstName + '&lastName=' + this.searchObject.lastName;
+      } else if (
+        this.searchObject.firstName &&
+        !this.searchObject.lastName &&
+        this.searchObject.address
+      ) {
+        query =
+          '?firstName=' + this.searchObject.firstName + '&address' + this.searchObject.address;
+      } else if (
+        !this.searchObject.firstName &&
+        this.searchObject.lastName &&
+        this.searchObject.address
+      ) {
+        query = '?lastName=' + this.searchObject.lastName + '&address' + this.searchObject.address;
+      } else if (
+        this.searchObject.firstName &&
+        this.searchObject.lastName &&
+        this.searchObject.address
+      ) {
+        query =
+          '?firstName=' +
+          this.searchObject.firstName +
+          '&lastName=' +
+          this.searchObject.lastName +
+          '&address' +
+          this.searchObject.address;
+      }
+      axios
+        .get('/api/customer/search/' + query)
+        .then(res => {
+          this.customerRd = RemoteData.success<ICustomer[], Error>(res.data);
+        })
+        .catch(e => {
+          this.customerRd = RemoteData.failure<ICustomer[], Error>(e);
+        });
     }
   }
 });

@@ -16,22 +16,40 @@
     />
     <div v-if="modelRd.hasData() && brandRd.hasData() && categoryRd.hasData()">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
           <div class="form-group">
             <fieldset>
               <legend>Erstellen</legend>
-              <label for="newName">Name</label>&nbsp;
-              <input type="text" id="newName" required v-model="newModel.title" />&nbsp;
-              <label for="newBrand">Marke</label>&nbsp;
-              <select id="newBrand" required v-model="newModel.brandId">
+              <input
+                type="text"
+                id="newName"
+                required
+                placeholder="Name"
+                v-model="newModel.title"
+                class="form-control"
+              />
+              <br />
+              <select
+                id="newBrand"
+                required
+                v-model="newModel.brandId"
+                class="form-control"
+                title="Marke wählen"
+              >
                 <option
                   v-for="brand in brandRd.getData()"
                   :key="brand.id"
                   :value="brand.id"
                 >{{brand.title}}</option>
-              </select>&nbsp;
-              <label for="newCategory">Kategorie</label>&nbsp;
-              <select id="newCategory" required v-model="newModel.categoryId">
+              </select>
+              <br />
+              <select
+                id="newCategory"
+                required
+                v-model="newModel.categoryId"
+                title="Kategorie wählen"
+                class="form-control"
+              >
                 <option
                   v-for="category in categoryRd.getData()"
                   :key="category.id"
@@ -40,64 +58,119 @@
               </select>
               <br />
               <button type="button" class="btn btn-primary" @click="add">
-                <em class="fas fa-plus" /> Erstellen
+                <em class="fas fa-plus" />&nbsp;Erstellen
+              </button>
+            </fieldset>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <fieldset>
+              <legend>Suche</legend>
+              <input
+                class="form-control"
+                type="text"
+                v-model="searchObject.name"
+                placeholder="Nach Namen suchen"
+              />
+              <br />
+              <select
+                required
+                v-model="searchObject.brandId"
+                class="form-control"
+                title="Marke wählen"
+              >
+                <option
+                  v-for="brand in brandRd.getData()"
+                  :key="brand.id"
+                  :value="brand.id"
+                >{{brand.title}}</option>
+              </select>
+              <br />
+              <select
+                required
+                v-model="searchObject.categoryId"
+                title="Kategorie wählen"
+                class="form-control"
+              >
+                <option
+                  v-for="category in categoryRd.getData()"
+                  :key="category.id"
+                  :value="category.id"
+                >{{category.name}}</option>
+              </select>
+              <br />
+              <button type="button" class="btn btn-primary" @click="search()">
+                <em class="fas fa-search" />&nbsp;Suchen
               </button>
             </fieldset>
           </div>
         </div>
       </div>
       <br />
-      <div class="row">
-        <div class="col-md-12">
-          <fieldset>
-            <legend>Übersicht</legend>
-            <div v-for="(carModel, idx) in modelRd.getData()" :key="carModel.id" class="entry">
-              <div
-                class="form-group"
-                :style="idx % 2 === 0 ? 'background-color: white;' : 'background-color: lightgray;'"
-              >
-                <label :for="carModel.id + 'Name'">Name</label>&nbsp;
-                <input
-                  :id="carModel.id + 'Name'"
-                  type="text"
-                  v-model="carModel.title"
-                  required
-                  @input="update(carModel)"
-                />&nbsp;
-                <label :for="carModel.id + 'Category'">Marke</label>&nbsp;
-                <select
-                  :id="carModel.id + 'Brand'"
-                  required
-                  v-model="carModel.brandId"
-                  @change="update(carModel)"
-                >
-                  <option
-                    v-for="brand in brandRd.getData()"
-                    :key="'Update' + brand.id"
-                    :value="brand.id"
-                  >{{brand.title}}</option>
-                </select>&nbsp;
-                <label :for="carModel.id + 'Category'">Kategorie</label>&nbsp;
-                <select
-                  :id="carModel.id + 'Category'"
-                  required
-                  v-model="carModel.categoryId"
-                  @change="update(carModel)"
-                >
-                  <option
-                    v-for="category in categoryRd.getData()"
-                    :key="'Update' + category.id"
-                    :value="category.id"
-                  >{{category.name}}</option>
-                </select>
-                <button type="button" class="btn btn-danger" @click="remove(carModel.id)">
-                  <em class="fas fa-trash" />
-                </button>
-              </div>
-            </div>
-          </fieldset>
+      <fieldset>
+        <legend>Übersicht</legend>
+        <div class="row">
+          <div class="col-md-4">
+            <label>Name</label>
+          </div>
+          <div class="col-md-4">
+            <label>Marke</label>
+          </div>
+          <div class="col-md-4">
+            <label>Kategorie</label>
+          </div>
         </div>
-      </div>
+        <div
+          v-for="(carModel, idx) in modelRd.getData()"
+          :key="carModel.id"
+          :class="idx % 2 === 0 ? 'row entry even' : 'row entry odd'"
+        >
+          <div class="col-md-4 form-group">
+            <input
+              :id="carModel.id + 'Name'"
+              type="text"
+              v-model="carModel.title"
+              required
+              @input="update(carModel)"
+              class="form-control"
+            />
+            <button type="button" class="btn btn-danger" @click="remove(carModel.id)">
+              <em class="fas fa-trash" />&nbsp;Löschen
+            </button>
+          </div>
+          <div class="col-md-4 form-group">
+            <select
+              :id="carModel.id + 'Brand'"
+              required
+              v-model="carModel.brandId"
+              class="form-control"
+              @change="update(carModel)"
+            >
+              <option
+                v-for="brand in brandRd.getData()"
+                :key="'Update' + brand.id"
+                :value="brand.id"
+              >{{brand.title}}</option>
+            </select>&nbsp;
+          </div>
+          <div class="col-md-4 form-group">
+            <select
+              class="form-control"
+              :id="carModel.id + 'Category'"
+              required
+              v-model="carModel.categoryId"
+              @change="update(carModel)"
+            >
+              <option
+                v-for="category in categoryRd.getData()"
+                :key="'Update' + category.id"
+                :value="category.id"
+              >{{category.name}}</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
     </div>
   </div>
 </template>
@@ -118,7 +191,8 @@ export default Vue.extend({
       modelRd: RemoteData.notAsked<ICarModel[], Error>(),
       brandRd: RemoteData.notAsked<IBrand[], Error>(),
       categoryRd: RemoteData.notAsked<ICarCategory[], Error>(),
-      newModel: {} as ICarModel
+      newModel: {} as ICarModel,
+      searchObject: { name: undefined, brandId: undefined, categoryId: undefined }
     };
   },
   created() {
@@ -168,9 +242,7 @@ export default Vue.extend({
       const uuidv1 = require('uuid/v1');
       this.newModel.id = uuidv1();
       await axios.post('/api/carModel', this.newModel);
-      this.newModel.title = '';
-      this.newModel.brandId = '';
-      this.newModel.categoryId = '';
+      this.newModel = {} as ICarModel;
       this.loadData();
     },
     async update(updateObj: ICarModel) {
@@ -184,11 +256,68 @@ export default Vue.extend({
       ) {
         return;
       }
-      await axios.put('/api/carModel/' + updateObj.id, updateObj);
+      await axios.put('/api/carModel', updateObj);
     },
     async remove(id: string) {
       await axios.delete('/api/carModel/' + id);
       this.loadData();
+    },
+    search() {
+      let query = '';
+      if (this.searchObject.name && !this.searchObject.brandId && !this.searchObject.categoryId) {
+        query = '?name=' + this.searchObject.name;
+      } else if (
+        !this.searchObject.name &&
+        this.searchObject.brandId &&
+        !this.searchObject.categoryId
+      ) {
+        query = '?brandId=' + this.searchObject.brandId;
+      } else if (
+        !this.searchObject.name &&
+        !this.searchObject.brandId &&
+        this.searchObject.categoryId
+      ) {
+        query = '?categoryId=' + this.searchObject.categoryId;
+      } else if (
+        this.searchObject.name &&
+        this.searchObject.brandId &&
+        !this.searchObject.categoryId
+      ) {
+        query = '?name=' + this.searchObject.name + '&brandId=' + this.searchObject.brandId;
+      } else if (
+        this.searchObject.name &&
+        !this.searchObject.brandId &&
+        this.searchObject.categoryId
+      ) {
+        query = '?name=' + this.searchObject.name + '&categoryId' + this.searchObject.categoryId;
+      } else if (
+        !this.searchObject.name &&
+        this.searchObject.brandId &&
+        this.searchObject.categoryId
+      ) {
+        query =
+          '?brandId=' + this.searchObject.brandId + '&categoryId' + this.searchObject.categoryId;
+      } else if (
+        this.searchObject.name &&
+        this.searchObject.brandId &&
+        this.searchObject.categoryId
+      ) {
+        query =
+          '?name=' +
+          this.searchObject.name +
+          '&brandId=' +
+          this.searchObject.brandId +
+          '&categoryId' +
+          this.searchObject.categoryId;
+      }
+      axios
+        .get('/api/carmodel/search/' + query)
+        .then(res => {
+          this.modelRd = RemoteData.success<ICarModel[], Error>(res.data);
+        })
+        .catch(e => {
+          this.modelRd = RemoteData.failure<ICarModel[], Error>(e);
+        });
     }
   }
 });

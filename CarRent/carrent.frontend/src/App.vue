@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Sachbearbeiter</router-link>
-&nbsp;|
+      <router-link to="/">Sachbearbeiter</router-link>&nbsp;|
     </div>
     <router-view />
   </div>
@@ -27,7 +26,7 @@ a:active {
   color: #42b983;
 }
 fieldset {
-  border: 2px solid;
+  border: 1px solid;
   padding: 10px;
 }
 legend {
@@ -37,9 +36,18 @@ button {
   margin-top: 10px;
 }
 .entry {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+}
+.row {
+  margin: 2px;
 }
 .form-group {
-  padding: 10px;
+  padding-top: 10px;
+}
+.even {
+  background: white;
+}
+.odd {
+  background: lightgray;
 }
 </style>

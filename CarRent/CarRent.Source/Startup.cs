@@ -2,9 +2,16 @@ using System;
 using AutoMapper;
 using CarRent.Source.CarManagement.Domain;
 using CarRent.Source.CarManagement.Dtos;
-using CarRent.Source.Common;
+using CarRent.Source.CarManagement.Repositories;
+using CarRent.Source.CarManagement.Repositories.Interfaces;
+using CarRent.Source.CarManagement.Services;
+using CarRent.Source.CarManagement.Services.Interfaces;
 using CarRent.Source.CustomerManagement.Domain;
 using CarRent.Source.CustomerManagement.Dtos;
+using CarRent.Source.CustomerManagement.Repositories;
+using CarRent.Source.CustomerManagement.Repositories.Interfaces;
+using CarRent.Source.CustomerManagement.Services;
+using CarRent.Source.CustomerManagement.Services.Interfaces;
 using CarRent.Source.Database;
 using CarRent.Source.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -29,16 +36,17 @@ namespace CarRent.Source
             {
                 options.UseMySql(Configuration.GetConnectionString("CarRentDb"));
             }, ServiceLifetime.Transient);
-            services.AddScoped<IRepository<Brand>, DatabaseRepository<Brand>>();
-            services.AddScoped<ICrudService<Brand>, CrudService<Brand>>();
-            services.AddScoped<IRepository<CarCategory>, DatabaseRepository<CarCategory>>();
-            services.AddScoped<ICrudService<CarCategory>, CrudService<CarCategory>>();
-            services.AddScoped<IRepository<CarModel>, DatabaseRepository<CarModel>>();
-            services.AddScoped<ICrudService<CarModel>, CrudService<CarModel>>();
-            services.AddScoped<IRepository<Car>, DatabaseRepository<Car>>();
-            services.AddScoped<ICrudService<Car>, CrudService<Car>>();
-            services.AddScoped<IRepository<Customer>, DatabaseRepository<Customer>>();
-            services.AddScoped<ICrudService<Customer>, CrudService<Customer>>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<ICarCategoryRepository, CarCategoryRepository>();
+            services.AddScoped<ICarCategoryService, CarCategoryService>();
+            services.AddScoped<ICarModelRepository, CarModelRepository>();
+            services.AddScoped<ICarModelService, CarModelService>();
+            services.AddScoped<ICarRepository, CarRepository>();
+            services.AddScoped<ICarService, CarService>();
+            
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
             services.AddAutoMapper(config =>
             {

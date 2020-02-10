@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using CarRent.Source.CarManagement.Domain;
 using CarRent.Source.CarManagement.Dtos;
-using CarRent.Source.Common;
+using CarRent.Source.CarManagement.SearchHelper;
+using CarRent.Source.CarManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.Source.CarManagement.Api
@@ -14,21 +12,17 @@ namespace CarRent.Source.CarManagement.Api
     [ApiController]
     public class CarCategoryController : Controller
     {
-        private readonly ICrudService<CarCategory> _carCategoryCrudService;
-        private readonly IMapper _mapper;
-        public CarCategoryController(ICrudService<CarCategory> carCategoryCrudService, IMapper mapper)
+        private readonly ICarCategoryService _carCategoryService;
+        public CarCategoryController(ICarCategoryService carCategoryService)
         {
-            _carCategoryCrudService = carCategoryCrudService;
-            _mapper = mapper;
+            _carCategoryService = carCategoryService;
         }
         [HttpGet]
         public async Task<ActionResult<List<CarCategoryDto>>> Get()
         {
             try
             {
-                var categoryList = await _carCategoryCrudService.GetAllAsync();
-                var listToReturn = _mapper.Map<List<CarCategory>, List<CarCategoryDto>>(categoryList).OrderBy(cc => cc.DailyFee).ToList();
-                return listToReturn;
+                return await _carCategoryService.GetAllAsync();
             }
             catch (Exception e)
             {
@@ -40,9 +34,8 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-                var carCategoryDto = _mapper.Map<CarCategory, CarCategoryDto>(await _carCategoryCrudService.GetByIdAsync(id));
-                if (carCategoryDto == null) return NotFound(null);
-                return carCategoryDto;
+                if (id == Guid.Empty) return BadRequest("Id must be a valid Guid");
+                return await _carCategoryService.GetByIdAsync(id);
             }
             catch (Exception e)
             {
@@ -56,7 +49,7 @@ namespace CarRent.Source.CarManagement.Api
             try
             {
                 if (carCategoryDto == null)  return BadRequest($"{nameof(carCategoryDto)} can not not be null!");
-                await _carCategoryCrudService.AddAsync(_mapper.Map<CarCategoryDto, CarCategory>(carCategoryDto));
+                await _carCategoryService.AddAsync(carCategoryDto);
                 return Ok();
             }
             catch (Exception e)
@@ -64,16 +57,12 @@ namespace CarRent.Source.CarManagement.Api
                 return BadRequest(e);
             }
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] CarCategoryDto carCategoryDto)
+        [HttpPut]
+        public async Task<ActionResult> Update([FromBody] CarCategoryDto carCategoryDto)
         {
             try
             {
-                if (id == Guid.Empty) return NotFound(null);
-                var carCategory = await _carCategoryCrudService.GetByIdAsync(id);
-                carCategory.Name = carCategoryDto.Name;
-                carCategory.DailyFee = carCategoryDto.DailyFee;
-                await _carCategoryCrudService.UpdateAsync(carCategory);
+                await _carCategoryService.UpdateAsync(carCategoryDto);
                 return Ok();
             }
             catch (Exception e)
@@ -86,9 +75,20 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-                if (await _carCategoryCrudService.CheckIfExistAsync(id) == false) return NotFound(null);
-                await _carCategoryCrudService.DeleteAsync(id);
+                await _carCategoryService.DeleteAsync(id);
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        [HttpGet("search")]
+        public async Task<ActionResult<List<CarCategoryDto>>> Search([FromQuery] string name, [FromQuery] decimal? fee)
+        {
+            try
+            {
+                return await _carCategoryService.Search(new CarCategorySearch{Name = name, Fee = fee});
             }
             catch (Exception e)
             {

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using CarRent.Source.CarManagement.Domain;
 using CarRent.Source.CarManagement.Dtos;
-using CarRent.Source.Common;
+using CarRent.Source.CarManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRent.Source.CarManagement.Api
@@ -14,21 +11,17 @@ namespace CarRent.Source.CarManagement.Api
     [ApiController]
     public class BrandController : Controller
     {
-        private readonly ICrudService<Brand> _brandCrudService;
-        private readonly IMapper _mapper;
-        public BrandController(ICrudService<Brand> brandCrudService, IMapper mapper)
+        private readonly IBrandService _brandService;
+        public BrandController(IBrandService brandService)
         {
-            _brandCrudService = brandCrudService;
-            _mapper = mapper;
+            _brandService = brandService;
         }
         [HttpGet]
         public async Task<ActionResult<List<BrandDto>>> Get()
         {
             try
             {
-                var brandList = await _brandCrudService.GetAllAsync();
-                var listToReturn = _mapper.Map<List<Brand>, List<BrandDto>>(brandList).OrderBy(b => b.Title).ToList();
-                return listToReturn;
+                return await _brandService.GetAllAsync();
             }
             catch (Exception e)
             {
@@ -40,9 +33,8 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-                var brandDto = _mapper.Map<Brand, BrandDto>(await _brandCrudService.GetByIdAsync(id));
-                if (brandDto == null) return NotFound(null);
-                return brandDto;
+                if (id == Guid.Empty) return BadRequest("Id must be a valid Guid");
+                return await _brandService.GetByIdAsync(id);
             }
             catch (Exception e)
             {
@@ -56,7 +48,7 @@ namespace CarRent.Source.CarManagement.Api
             try
             {
                 if (brandDto == null)  return BadRequest($"{nameof(brandDto)} can not not be null!");
-                await _brandCrudService.AddAsync(_mapper.Map<BrandDto, Brand>(brandDto));
+                await _brandService.AddAsync(brandDto);
                 return Ok();
             }
             catch (Exception e)
@@ -64,15 +56,12 @@ namespace CarRent.Source.CarManagement.Api
                 return BadRequest(e);
             }
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] BrandDto brandDto)
+        [HttpPut]
+        public async Task<ActionResult> Update([FromBody] BrandDto brandDto)
         {
             try
             {
-                if (id == Guid.Empty) return NotFound(null);
-                var brand = await _brandCrudService.GetByIdAsync(id);
-                brand.Title = brandDto.Title;
-                await _brandCrudService.UpdateAsync(brand);
+                await _brandService.UpdateAsync(brandDto);
                 return Ok();
             }
             catch (Exception e)
@@ -85,9 +74,20 @@ namespace CarRent.Source.CarManagement.Api
         {
             try
             {
-                if (await _brandCrudService.CheckIfExistAsync(id) == false) return NotFound(null);
-                await _brandCrudService.DeleteAsync(id);
+                await _brandService.DeleteAsync(id);
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        [HttpGet("search")]
+        public async Task<ActionResult<List<BrandDto>>> Search([FromQuery] string brandName)
+        {
+            try
+            {
+                return await _brandService.Search(brandName);
             }
             catch (Exception e)
             {

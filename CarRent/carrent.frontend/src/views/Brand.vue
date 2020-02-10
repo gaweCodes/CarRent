@@ -7,46 +7,71 @@
       <p>{{brandRd.getError()}}</p>
     </alert>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="form-group">
           <fieldset>
             <legend>Erstellen</legend>
-            <label for="new">Name</label>&nbsp;
-            <input type="text" id="new" required v-model="newBrand.title" />
+            <input
+              type="text"
+              id="new"
+              class="form-control"
+              required
+              v-model="newBrand.title"
+              placeholder="Name"
+            />
             <br />
             <button type="button" class="btn btn-primary" @click="add">
-              <em class="fas fa-plus" /> Erstellen
+              <em class="fas fa-plus" />&nbsp;Erstellen
+            </button>
+          </fieldset>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <fieldset>
+            <legend>Suche</legend>
+            <input
+              class="form-control"
+              type="text"
+              v-model="searchText"
+              placeholder="Nach Namen suchen"
+            />
+            <br />
+            <button type="button" class="btn btn-primary" @click="search()">
+              <em class="fas fa-search" />&nbsp;Suchen
             </button>
           </fieldset>
         </div>
       </div>
     </div>
     <br />
-    <div class="row">
-      <div class="col-md-12" v-if="brandRd.hasData()">
-        <fieldset>
-          <legend>Übersicht</legend>
-          <div v-for="(brand, idx) in brandRd.getData()" :key="brand.id" class="entry">
-            <div
-              class="form-group"
-              :style="idx % 2 === 0 ? 'background-color: white;' : 'background-color: lightgray;'"
-            >
-              <label :for="brand.id">Name</label>&nbsp;
-              <input
-                type="text"
-                required
-                :id="brand.id"
-                v-model="brand.title"
-                @input="update(brand)"
-              />&nbsp;
-              <button type="button" class="btn btn-danger" @click="remove(brand.id)">
-                <em class="fas fa-trash" />
-              </button>
-            </div>
-          </div>
-        </fieldset>
+    <fieldset v-if="brandRd.hasData()">
+      <legend>Übersicht</legend>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Name</label>
+        </div>
       </div>
-    </div>
+      <div
+        v-for="(brand, idx) in brandRd.getData()"
+        :key="brand.id"
+        :class="idx % 2 === 0 ? 'row entry even' : 'row entry odd'"
+      >
+        <div class="col-md-6 form-group">
+          <input
+            type="text"
+            required
+            :id="brand.id"
+            v-model="brand.title"
+            @input="update(brand)"
+            class="form-control"
+          />
+          <button type="button" class="btn btn-danger" @click="remove(brand.id)">
+            <em class="fas fa-trash" />&nbsp;Löschen
+          </button>
+        </div>
+      </div>
+    </fieldset>
   </div>
 </template>
 <script lang="ts">
@@ -60,7 +85,11 @@ import { IBrand } from '@/models/IBrand';
 export default Vue.extend({
   components: { Loading, Alert },
   data() {
-    return { brandRd: RemoteData.notAsked<IBrand[], Error>(), newBrand: {} as IBrand };
+    return {
+      brandRd: RemoteData.notAsked<IBrand[], Error>(),
+      newBrand: {} as IBrand,
+      searchText: ''
+    };
   },
   created() {
     this.loadData();
@@ -83,18 +112,28 @@ export default Vue.extend({
       const uuidv1 = require('uuid/v1');
       this.newBrand.id = uuidv1();
       await axios.post('/api/brand', this.newBrand);
-      this.newBrand.title = '';
+      this.newBrand = {} as IBrand;
       this.loadData();
     },
     async update(updateObj: IBrand) {
       if ((document.getElementById(updateObj.id) as HTMLFormElement).reportValidity() === false) {
         return;
       }
-      await axios.put('/api/brand/' + updateObj.id, updateObj);
+      await axios.put('/api/brand', updateObj);
     },
     async remove(id: string) {
       await axios.delete('/api/brand/' + id);
       this.loadData();
+    },
+    search() {
+      axios
+        .get('/api/brand/search/?brandName=' + this.searchText)
+        .then(res => {
+          this.brandRd = RemoteData.success<IBrand[], Error>(res.data);
+        })
+        .catch(e => {
+          this.brandRd = RemoteData.failure<IBrand[], Error>(e);
+        });
     }
   }
 });
