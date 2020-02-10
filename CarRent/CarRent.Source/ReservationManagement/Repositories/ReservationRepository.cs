@@ -2,42 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarRent.Source.Database;
 using CarRent.Source.ReservationManagement.Domain;
 using CarRent.Source.ReservationManagement.Repositories.Interfaces;
 using CarRent.Source.ReservationManagement.SearchHelper;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Source.ReservationManagement.Repositories
 {
     public class ReservationRepository : IReservationRepository
     {
-        public Task<List<Reservation>> GetAllAsync()
+        private readonly CarRentDbContext _dbContext;
+        public ReservationRepository(CarRentDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
 
-        public Task<Reservation> GetAsync(Guid id)
+        public async Task<List<Reservation>> GetAllAsync() =>
+            await _dbContext.Reservations.AsQueryable().OrderBy(r => r.State).ToListAsync();
+
+        public async Task<Reservation> GetAsync(Guid id) =>
+            await _dbContext.Reservations.AsNoTracking().AsQueryable().SingleOrDefaultAsync(b => b.Id == id);
+
+        public async Task AddAsync(Reservation obj)
         {
-            throw new NotImplementedException();
+            await _dbContext.Reservations.AddAsync(obj);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task AddAsync(Reservation obj)
+        public async Task DeleteAsync(Reservation obj)
         {
-            throw new NotImplementedException();
+            _dbContext.Reservations.Remove(obj);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(Reservation obj)
+        public async Task UpdateAsync(Reservation obj)
         {
-            throw new NotImplementedException();
+            _dbContext.Reservations.Update(obj);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(Reservation obj)
+        public async Task<List<Reservation>> Search(ReservationSearch search)
         {
-            throw new NotImplementedException();
-        }
+            var query = _dbContext.Reservations.AsNoTracking().AsQueryable();
+            if (!string.IsNullOrWhiteSpace(search.State))
+                query = query.Where(r => r.State.ToString().Contains(search.State, StringComparison.InvariantCultureIgnoreCase));
+            if (search.CarId.HasValue)
+                query = query.Where(r => r.CarId == search.CarId.Value);
+            if (search.CustomerId.HasValue)
+                query = query.Where(r =>r.CustomerId == search.CustomerId.Value);
+            if (search.TotalCost.HasValue)
+                query = query.Where(r => r.TotalCost == search.TotalCost.Value);
 
-        public Task<List<Reservation>> Search(ReservationSearch search)
-        {
-            throw new NotImplementedException();
+            return await query.OrderBy(r => r.State).ToListAsync();
         }
     }
 }

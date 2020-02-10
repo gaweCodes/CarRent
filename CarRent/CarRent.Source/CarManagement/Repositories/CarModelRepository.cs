@@ -13,7 +13,6 @@ namespace CarRent.Source.CarManagement.Repositories
     public class CarModelRepository : ICarModelRepository
     {
         private readonly CarRentDbContext _dbContext;
-
         public CarModelRepository(CarRentDbContext dbContext)
         {
             _dbContext = dbContext;
