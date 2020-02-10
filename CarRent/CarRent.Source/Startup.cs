@@ -14,6 +14,10 @@ using CarRent.Source.CustomerManagement.Services;
 using CarRent.Source.CustomerManagement.Services.Interfaces;
 using CarRent.Source.Database;
 using CarRent.Source.Extensions;
+using CarRent.Source.ReservationManagement.Repositories;
+using CarRent.Source.ReservationManagement.Repositories.Interfaces;
+using CarRent.Source.ReservationManagement.Services;
+using CarRent.Source.ReservationManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +52,9 @@ namespace CarRent.Source
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerService, CustomerService>();
 
+            services.AddScoped<IReservationService, ReservationService>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+            
             services.AddAutoMapper(config =>
             {
                 config.CreateMap<Brand, BrandDto>();

@@ -17,6 +17,9 @@
       <li>
         <router-link to="/customers">Kunden</router-link>
       </li>
+      <li>
+        <router-link to="/reservations">Reservationen</router-link>
+      </li>
     </ul>
   </div>
 </template>

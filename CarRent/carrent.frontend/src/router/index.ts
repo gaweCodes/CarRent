@@ -6,6 +6,7 @@ import Category from '@/views/Category.vue';
 import CarModel from '@/views/CarModel.vue';
 import Car from '@/views/Car.vue';
 import CustomerList from '@/views/CustomerList.vue';
+import ReservationList from '@/views.ReservationList.vue';
 
 Vue.use(VueRouter);
 
@@ -37,9 +38,10 @@ const routes = [
   },
   {
     path: '/customers',
-    name: 'customer',
+    name: 'customers',
     component: CustomerList
-  }
+  },
+  { path: '/reservations', name: 'reservations', component: ReservationList }
 ];
 
 const router = new VueRouter({
