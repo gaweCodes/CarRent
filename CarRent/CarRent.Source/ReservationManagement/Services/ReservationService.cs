@@ -73,7 +73,6 @@ namespace CarRent.Source.ReservationManagement.Services
             var reservationListDtos = new List<ReservationDto>();
             reservationList.ForEach(r => { reservationListDtos.Add(Reservation.ToDto(r)); });
             return reservationListDtos;
-
         }
     }
 }

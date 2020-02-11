@@ -184,7 +184,7 @@ import { IBrand } from '@/models/IBrand';
 import { ICustomer } from '@/models/ICustomer';
 import { ICar } from '@/models/ICar';
 import { IReservation } from '@/models/IReservation';
-import { IModelOption } from '@/models/IModelOption';
+import { IModelOption } from '@/models/IDrowpdownOption';
 
 export default Vue.extend({
   components: { Loading, Alert },

@@ -49,6 +49,8 @@ namespace CarRent.Source.ReservationManagement.Repositories
                 query = query.Where(r => r.State.ToString().Contains(search.State, StringComparison.InvariantCultureIgnoreCase));
             if (search.CarId.HasValue)
                 query = query.Where(r => r.CarId == search.CarId.Value);
+            if (search.DurationInDays.HasValue)
+                query = query.Where(r => r.DurationInDays == search.DurationInDays.Value);
             if (search.CustomerId.HasValue)
                 query = query.Where(r =>r.CustomerId == search.CustomerId.Value);
             if (search.TotalCost.HasValue)
