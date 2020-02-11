@@ -5,6 +5,9 @@
     <alert v-if="reservationRd.hasError()">
       <p>{{ reservationRd.getError() }}</p>
     </alert>
+    <alert v-if="customerRd.hasError()">
+      <p>{{ customerRd.getError() }}</p>
+    </alert>
     <alert v-if="modelRd.hasError()">
       <p>{{ modelRd.getError() }}</p>
     </alert>
@@ -28,17 +31,18 @@
           categoryRd.isLoading() ||
           categoryRd.isNotAsked() ||
           reservationRd.isNotAsked() ||
-          reservationRd.isLoading()
+          reservationRd.isLoading() ||
+          customerRd.isNotAsked() || 
+          customerRd.isLoading()
       "
     />
     <div
-      v-if="
-        carRd.hasData() &&
+      v-if="carRd.hasData() &&
           modelRd.hasData() &&
           brandRd.hasData() &&
           categoryRd.hasData() &&
-          reservationRd.hasData()
-      "
+          reservationRd.hasData() &&
+          customerRd.hasData()"
     >
       <div class="row">
         <div class="col-md-6">
@@ -48,10 +52,13 @@
               <input
                 type="number"
                 id="newDurationInDays"
-                v-model="reservation.durationInDays"
+                v-model="newReservation.durationInDays"
                 required
+                :min="1"
+                class="form-control"
                 placeholder="Dauer in Tagen"
               />
+              <br />
               <select
                 id="newCustomerId"
                 required
@@ -63,8 +70,15 @@
                   v-for="customer in buildCustomerOptions()"
                   :key="customer.value"
                   :value="customer.value"
-                  >{{ customer.text }}</option
-                >
+                >{{ customer.text }}</option>
+              </select>
+              <br />
+              <select v-model="selectedCategoryId" title="Kategorie wählen" class="form-control">
+                <option
+                  v-for="category in categoryRd.getData()"
+                  :key="category.id"
+                  :value="category.id"
+                >{{category.name}} - CHF {{category.dailyFee}} pro Tag</option>
               </select>
               <br />
               <select
@@ -74,9 +88,11 @@
                 title="Auto wählen"
                 class="form-control"
               >
-                <option v-for="car in buildCarOptions()" :key="car.value" :value="car.value">{{
+                <option v-for="car in buildCarOptions" :key="car.value" :value="car.value">
+                  {{
                   car.text
-                }}</option>
+                  }}
+                </option>
               </select>
               <br />
               <button type="button" class="btn btn-primary" @click="add">
@@ -85,7 +101,7 @@
             </fieldset>
           </div>
         </div>
-        <div class="col-md-6">
+        <!--<div class="col-md-6">
           <div class="form-group">
             <fieldset>
               <legend>Suche</legend>
@@ -97,9 +113,11 @@
               />
               <br />
               <select v-model="searchObject.carId" title="Nach Auto suchen" class="form-control">
-                <option v-for="car in buildCarOptions()" :key="car.value" :value="car.value">{{
+                <option v-for="car in buildCarOptions()" :key="car.value" :value="car.value">
+                  {{
                   car.text
-                }}</option>
+                  }}
+                </option>
               </select>
               <br />
               <select
@@ -111,8 +129,7 @@
                   v-for="customer in buildCustomerOptions()"
                   :key="customer.value"
                   :value="customer.value"
-                  >{{ customer.text }}</option
-                >
+                >{{ customer.text }}</option>
               </select>
               <br />
               <button type="button" class="btn btn-primary" @click="search()">
@@ -120,20 +137,29 @@
               </button>
             </fieldset>
           </div>
-        </div>
+        </div>-->
       </div>
       <br />
-      <!--<fieldset>
+      <fieldset>
         <legend>Übersicht</legend>
         <div class="row">
           <div class="col-md-6">
-            <label>Autonummer</label>
+            <label>Dauer</label>
           </div>
           <div class="col-md-6">
-            <label>Modell</label>
+            <label>Auto</label>
+          </div>
+          <div class="col-md-6">
+            <label>Kunde</label>
+          </div>
+          <div class="col-md-6">
+            <label>Kosten</label>
+          </div>
+          <div class="col-md-6">
+            <label>Status</label>
           </div>
         </div>
-        <div
+        <!--<div
           v-for="(car, idx) in carRd.getData()"
           :key="car.id"
           :class="idx % 2 === 0 ? 'row entry even' : 'row entry odd'"
@@ -163,12 +189,11 @@
                 v-for="model in buildModelOptions()"
                 :key="model.value"
                 :value="model.value"
-                >{{ model.text }}</option
-              >
+              >{{ model.text }}</option>
             </select>
           </div>
-        </div>
-      </fieldset>-->
+        </div>-->
+      </fieldset>
     </div>
   </div>
 </template>
@@ -183,8 +208,8 @@ import { ICarCategory } from '@/models/ICarCategory';
 import { IBrand } from '@/models/IBrand';
 import { ICustomer } from '@/models/ICustomer';
 import { ICar } from '@/models/ICar';
-import { IReservation } from '@/models/IReservation';
-import { IModelOption } from '@/models/IDrowpdownOption';
+import { IDropdownOption } from '@/models/IDropdownOption';
+import { IReservation } from '../models/IReservation';
 
 export default Vue.extend({
   components: { Loading, Alert },
@@ -192,49 +217,95 @@ export default Vue.extend({
     return {
       carRd: RemoteData.notAsked<ICar[], Error>(),
       modelRd: RemoteData.notAsked<ICarModel[], Error>(),
+      customerRd: RemoteData.notAsked<ICustomer[], Error>(),
       brandRd: RemoteData.notAsked<IBrand[], Error>(),
       categoryRd: RemoteData.notAsked<ICarCategory[], Error>(),
       reservationRd: RemoteData.notAsked<IReservation[], Error>(),
       newReservation: {} as IReservation,
+      selectedCategoryId: '',
       searchObject: {}
     };
   },
   async created() {
     await this.loadData();
   },
+  computed: {
+    buildCarOptions(): IDropdownOption[] {
+      const modelOptions = [] as IDropdownOption[];
+      const models = this.modelRd.getData().filter(x => x.categoryId === this.selectedCategoryId);
+      if (models.length === 0) {
+        return modelOptions;
+      }
+
+      const cars = [] as ICar[];
+      models.forEach((model: ICarModel) => {
+        cars.push(
+          ...this.carRd.getData().filter(c => {
+            // @ts-ignore
+            return c.carModelid === model.id;
+          })
+        );
+      });
+      cars.forEach((car: ICar) => {
+        const model = models.find(m => m.id === car.carModelid);
+        if (model === undefined) {
+          return;
+        }
+        const brand = this.brandRd.getData().find(x => x.id === model.brandId);
+        if (brand === undefined) {
+          return;
+        }
+        modelOptions.push({
+          value: car.id,
+          text: car.carNumber + ' - ' + brand.title + ' - ' + model.title
+        } as IDropdownOption);
+      });
+      return modelOptions;
+    }
+  },
   methods: {
-    buildModelOptions(): IModelOption[] {
-      const modelOptions = [] as IModelOption[];
-      if (this.modelRd.hasData()) {
-        this.modelRd.getData().forEach((model: ICarModel) => {
-          const brand = this.brandRd.getData().find(x => x.id === model.brandId);
-          if (brand === undefined) {
-            return;
-          }
-          const category = this.categoryRd.getData().find(x => x.id === model.categoryId);
-          if (category === undefined) {
-            return;
-          }
-          modelOptions.push({
-            value: model.id,
-            text:
-              brand.title +
-              ' - ' +
-              model.title +
-              ' - ' +
-              category.name +
-              ' - CHF ' +
-              category.dailyFee +
-              '/Tag'
-          } as IModelOption);
+    buildCustomerOptions(): IDropdownOption[] {
+      const customerOptions = [] as IDropdownOption[];
+      if (this.customerRd.hasData()) {
+        this.customerRd.getData().forEach((customer: ICustomer) => {
+          customerOptions.push({
+            value: customer.id,
+            text: customer.firstName + ' ' + customer.lastName + ', ' + customer.address
+          } as IDropdownOption);
         });
       }
-      return modelOptions;
+      return customerOptions;
     },
     async loadData() {
+      await this.loadCarData();
+      await this.loadCustomerData();
       await this.loadModelData();
       await this.loadBrands();
       await this.loadCategories();
+      await axios
+        .get('/api/reservation')
+        .then(res => {
+          this.reservationRd = RemoteData.success<IReservation[], Error>(res.data);
+          console.log(this.reservationRd.getData());
+          if (this.categoryRd.getData().length > 0) {
+            this.selectedCategoryId = this.categoryRd.getData()[0].id;
+          }
+        })
+        .catch(e => {
+          this.reservationRd = RemoteData.failure<IReservation[], Error>(e);
+        });
+    },
+    async loadCustomerData() {
+      await axios
+        .get('/api/customer')
+        .then(res => {
+          this.customerRd = RemoteData.success<ICustomer[], Error>(res.data);
+        })
+        .catch(e => {
+          this.customerRd = RemoteData.failure<ICustomer[], Error>(e);
+        });
+    },
+    async loadCarData() {
       await axios
         .get('/api/car')
         .then(res => {
@@ -276,18 +347,21 @@ export default Vue.extend({
     },
     async add() {
       if (
-        (document.getElementById('newNumber') as HTMLFormElement).reportValidity() === false ||
-        (document.getElementById('newModel') as HTMLFormElement).reportValidity() === false
+        (document.getElementById('newDurationInDays') as HTMLFormElement).reportValidity() ===
+          false ||
+        (document.getElementById('newCustomerId') as HTMLFormElement).reportValidity() === false ||
+        (document.getElementById('newCarId') as HTMLFormElement).reportValidity() === false
       ) {
         return;
       }
       const uuidv1 = require('uuid/v1');
-      this.newCar.id = uuidv1();
-      await axios.post('/api/car', this.newCar);
-      this.newCar = {} as ICar;
+      this.newReservation.id = uuidv1();
+      this.newReservation.durationInDays = Number(this.newReservation.durationInDays);
+      await axios.post('/api/reservation', this.newReservation);
+      this.newReservation = {} as IReservation;
       this.loadData();
-    },
-    async update(updateObj: ICarModel) {
+    }
+    /*async update(updateObj: ICarModel) {
       if (
         (document.getElementById(updateObj.id + 'Number') as HTMLFormElement).reportValidity() ===
           false ||
@@ -323,7 +397,7 @@ export default Vue.extend({
         .catch(e => {
           this.carRd = RemoteData.failure<ICar[], Error>(e);
         });
-    }
+    }*/
   }
 });
 </script>

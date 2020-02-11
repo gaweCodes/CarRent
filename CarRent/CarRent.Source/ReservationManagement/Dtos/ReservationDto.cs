@@ -14,9 +14,7 @@ namespace CarRent.Source.ReservationManagement.Dtos
         public Guid CustomerId { get; set; }
         [Range(1, int.MaxValue)]
         public int DurationInDays { get; set; }
-        [Range(typeof(decimal), "1", "79228162514264337593543950335")]
         public decimal TotalCost { get; set; }
-        [Required]
         public string State { get; set; }
     }
 }

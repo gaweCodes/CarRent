@@ -137,7 +137,7 @@ import { ICarModel } from '@/models/ICarModel';
 import { ICarCategory } from '@/models/ICarCategory';
 import { IBrand } from '@/models/IBrand';
 import { ICar } from '@/models/ICar';
-import { IModelOption } from '@/models/IModelOption';
+import { IDropdownOption } from '@/models/IDropdownOption';
 
 export default Vue.extend({
   components: { Loading, Alert },
@@ -155,8 +155,8 @@ export default Vue.extend({
     await this.loadData();
   },
   methods: {
-    buildModelOptions(): IModelOption[] {
-      const modelOptions = [] as IModelOption[];
+    buildModelOptions(): IDropdownOption[] {
+      const modelOptions = [] as IDropdownOption[];
       if (this.modelRd.hasData()) {
         this.modelRd.getData().forEach((model: ICarModel) => {
           const brand = this.brandRd.getData().find(x => x.id === model.brandId);
@@ -178,7 +178,7 @@ export default Vue.extend({
               ' - CHF ' +
               category.dailyFee +
               '/Tag'
-          } as IModelOption);
+          } as IDropdownOption);
         });
       }
       return modelOptions;
