@@ -1,12 +1,9 @@
-<template>
+<template functional>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Sachbearbeiter</router-link>&nbsp;|
-    </div>
+    <div id="nav"><router-link to="/">Sachbearbeiter</router-link>&nbsp;|</div>
     <router-view />
   </div>
 </template>
-
 <style lang="scss">
 #app {
   font-family: Arial, Helvetica, Arial, sans-serif;

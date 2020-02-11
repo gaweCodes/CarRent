@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using CarRent.Source.Common;
+using CarRent.Source.ReservationManagement.Dtos;
 
 namespace CarRent.Source.ReservationManagement.Domain
 {
@@ -23,5 +24,23 @@ namespace CarRent.Source.ReservationManagement.Domain
         public void SetActive() => State = ReservationState.Active;
         public void SetClosed() => State = ReservationState.Closed;
         public void CalculateTotal() => TotalCost = DailyFee * DurationInDays;
+        public static ReservationDto ToDto(Reservation source) => new ReservationDto
+            {
+                CarId = source.CarId,
+                CustomerId = source.CustomerId,
+                DurationInDays = source.DurationInDays,
+                Id = source.Id,
+                State = source.State.ToString(),
+                TotalCost = source.TotalCost
+            };
+
+        public static Reservation FromDto(ReservationDto source) => new Reservation
+        {
+            Id = source.Id, 
+            CarId = source.CarId, 
+            CustomerId = source.CustomerId,
+            DurationInDays = source.DurationInDays, 
+            TotalCost = source.TotalCost,
+        };
     }
 }

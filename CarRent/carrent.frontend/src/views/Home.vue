@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <div class="container">
     <h1>Funktionen</h1>
     <ul>
@@ -23,15 +23,3 @@
     </ul>
   </div>
 </template>
-
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
-
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-};
-</script>
