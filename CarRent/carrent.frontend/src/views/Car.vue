@@ -103,7 +103,7 @@
               class="form-control"
               @input="update(car)"
             />
-            <button type="button" class="btn btn-danger" @click="remove(carModel.id)">
+            <button type="button" class="btn btn-danger" @click="remove(car.id)">
               <em class="fas fa-trash" />&nbsp;Löschen
             </button>
           </div>

@@ -143,41 +143,45 @@
       <fieldset>
         <legend>Übersicht</legend>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label>Dauer</label>
           </div>
-          <div class="col-md-6">
-            <label>Auto</label>
-          </div>
-          <div class="col-md-6">
-            <label>Kunde</label>
-          </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label>Kosten</label>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <label>Kunde</label>
+          </div>
+          <div class="col-md-4">
+            <label>Auto</label>
+          </div>
+          <div class="col-md-4">
+            <label>Kategorie</label>
+          </div>
+          <div class="col-md-4">
             <label>Status</label>
           </div>
         </div>
-        <!--<div
-          v-for="(car, idx) in carRd.getData()"
-          :key="car.id"
+        <div
+          v-for="(reservation, idx) in reservationRd.getData()"
+          :key="reservation.id"
           :class="idx % 2 === 0 ? 'row entry even' : 'row entry odd'"
         >
-          <div class="col-md-6 form-group">
+          <div class="col-md-4 form-group">
             <input
-              :id="car.id + 'Number'"
-              type="text"
-              v-model="car.carNumber"
+              :id="reservation.id + 'Duration'"
+              type="number"
+              v-model="reservation.durationInDays"
               required
+              :min="1"
               class="form-control"
-              @input="update(car)"
+              @input="update(reservation)"
             />
-            <button type="button" class="btn btn-danger" @click="remove(carModel.id)">
+            <button type="button" class="btn btn-danger" @click="remove(reservation.id)">
               <em class="fas fa-trash" />&nbsp;Löschen
             </button>
           </div>
-          <div class="col-md-6 form-group">
+          <!--<div class="col-md-6 form-group">
             <select
               :id="car.id + 'Model'"
               required
@@ -191,8 +195,8 @@
                 :value="model.value"
               >{{ model.text }}</option>
             </select>
-          </div>
-        </div>-->
+          </div>-->
+        </div>
       </fieldset>
     </div>
   </div>
