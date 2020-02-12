@@ -25,11 +25,9 @@ using CarRent.Source.ReservationManagement.Repositories.Interfaces;
 using CarRent.Source.ReservationManagement.Services;
 using CarRent.Source.ReservationManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace CarRent.Source
 {
@@ -84,11 +82,8 @@ namespace CarRent.Source
             }, AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
         }
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseRouting();
