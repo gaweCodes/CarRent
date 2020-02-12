@@ -3,14 +3,16 @@ using System;
 using CarRent.Source.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRent.Source.Migrations
 {
     [DbContext(typeof(CarRentDbContext))]
-    partial class CarRentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200212190753_Contract")]
+    partial class Contract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,6 +110,9 @@ namespace CarRent.Source.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("CustomerId1")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("DurationInDays")
                         .HasColumnType("int");
 
@@ -122,6 +127,8 @@ namespace CarRent.Source.Migrations
                     b.HasIndex("CarId");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("CustomerId1");
 
                     b.HasIndex("ReservationId")
                         .IsUnique();
@@ -164,6 +171,9 @@ namespace CarRent.Source.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("CustomerId1")
+                        .HasColumnType("char(36)");
+
                     b.Property<decimal>("DailyFee")
                         .HasColumnType("decimal(65,30)");
 
@@ -181,6 +191,8 @@ namespace CarRent.Source.Migrations
                     b.HasIndex("CarId");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("CustomerId1");
 
                     b.ToTable("Reservations");
                 });
@@ -223,6 +235,11 @@ namespace CarRent.Source.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CarRent.Source.CustomerManagement.Domain.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId1")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("CarRent.Source.ReservationManagement.Domain.Reservation", null)
                         .WithOne()
                         .HasForeignKey("CarRent.Source.ContractManagement.Domain.RentalContract", "ReservationId")
@@ -243,6 +260,11 @@ namespace CarRent.Source.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("CarRent.Source.CustomerManagement.Domain.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId1")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

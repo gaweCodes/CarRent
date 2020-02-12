@@ -14,5 +14,6 @@ namespace CarRent.Source.ReservationManagement.Services.Interfaces
         public Task UpdateAsync(ReservationDto obj);
         public Task DeleteAsync(Guid id);
         public Task<List<ReservationDto>> Search(ReservationSearch search);
+        public Task PickUp(ReservationDto obj);
     }
 }

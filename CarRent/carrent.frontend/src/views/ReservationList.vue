@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Reservationen</h1>
+    <h1>Reservationen / Verträge</h1>
     <hr />
     <alert v-if="reservationRd.hasError()">
       <p>{{ reservationRd.getError() }}</p>
@@ -139,8 +139,8 @@
               />
               <br />
               <select v-model="searchObject.state" title="Nach Status suchen" class="form-control">
-                <option value="Active">Aktiv</option>
-                <option value="Closed">Geschlossen</option>
+                <option value="Active">Reservation</option>
+                <option value="Closed">Vertrag</option>
               </select>
               <br />
               <button type="button" class="btn btn-primary" @click="search()">
@@ -235,6 +235,11 @@
               readonly
               class="form-control"
             />
+          </div>
+          <div class="col-md-2 form-group">
+            <button type="button" class="btn btn-primary form-control" @click="pickUp(reservation)">
+              <em class="fas fa-truck" />&nbsp;Abholung
+            </button>
           </div>
           <div class="col-md-2 form-group">
             <button
@@ -513,6 +518,10 @@ export default Vue.extend({
     },
     async remove(id: string) {
       await axios.delete('/api/reservation/' + id);
+      this.loadData();
+    },
+    async pickUp(reservation: IReservation) {
+      await axios.post('/api/reservation/pickup', reservation);
       this.loadData();
     },
     search() {

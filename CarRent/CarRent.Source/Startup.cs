@@ -6,6 +6,12 @@ using CarRent.Source.CarManagement.Repositories;
 using CarRent.Source.CarManagement.Repositories.Interfaces;
 using CarRent.Source.CarManagement.Services;
 using CarRent.Source.CarManagement.Services.Interfaces;
+using CarRent.Source.ContractManagement.Domain;
+using CarRent.Source.ContractManagement.Dtos;
+using CarRent.Source.ContractManagement.Repositories;
+using CarRent.Source.ContractManagement.Repositories.Interfaces;
+using CarRent.Source.ContractManagement.Services;
+using CarRent.Source.ContractManagement.Services.Interfaces;
 using CarRent.Source.CustomerManagement.Domain;
 using CarRent.Source.CustomerManagement.Dtos;
 using CarRent.Source.CustomerManagement.Repositories;
@@ -54,7 +60,10 @@ namespace CarRent.Source
 
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
-            
+
+            services.AddScoped<IRentalContractService, RentalContractService>();
+            services.AddScoped<IRentalContractRepository, RentalContractRepository>();
+
             services.AddAutoMapper(config =>
             {
                 config.CreateMap<Brand, BrandDto>();
@@ -68,6 +77,10 @@ namespace CarRent.Source
 
                 config.CreateMap<Customer, CustomerDto>();
                 config.CreateMap<CustomerDto, Customer>();
+
+                config.CreateMap<RentalContract, RentalContractDto>();
+                config.CreateMap<RentalContractDto, RentalContract>();
+
             }, AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
         }

@@ -35,7 +35,6 @@ namespace CarRent.Source.ReservationManagement.Api
         {
             try
             {
-                if (id == Guid.Empty) return BadRequest("Id must be a valid Guid");
                 return await _reservationService.GetByIdAsync(id);
             }
             catch (Exception e)
@@ -49,8 +48,21 @@ namespace CarRent.Source.ReservationManagement.Api
         {
             try
             {
-                if (reservationDto == null)  return BadRequest($"{nameof(reservationDto)} can not not be null!");
                 await _reservationService.AddAsync(reservationDto);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        [HttpPost]
+        [Route("pickup")]
+        public async Task<ActionResult> PickUp([FromBody] ReservationDto reservationDto)
+        {
+            try
+            {
+                await _reservationService.PickUp(reservationDto);
                 return Ok();
             }
             catch (Exception e)
