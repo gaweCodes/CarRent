@@ -18,10 +18,12 @@ steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'SonarCloud'
+    # TODO
+    organization: '<<<< TODO >>>>'
     scannerMode: 'MSBuild'
     projectKey: 'CarRent'
     projectName: 'CarRent'
-    
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
