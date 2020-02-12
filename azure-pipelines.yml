@@ -16,17 +16,14 @@ steps:
     organization: 'gawecodes'
     scannerMode: 'MSBuild'
     projectKey: 'gaweCodes_CarRent'
-    projectName: 'CarRent'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: '**/*.csproj'
     arguments: '-c Release'
-
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
     projects: '**/*.csproj'
     testRunTitle: 'Tests'
-
 - task: SonarCloudAnalyze@1
