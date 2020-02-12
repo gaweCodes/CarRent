@@ -18,11 +18,17 @@ steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'SonarCloud'
-    # TODO
-    organization: '<<<< TODO >>>>'
+    organization: 'gawecodes'
     scannerMode: 'MSBuild'
-    projectKey: 'CarRent'
+    projectKey: 'gaweCodes_CarRent'
     projectName: 'CarRent'
+# - task: SonarCloudPrepare@1
+#  inputs:
+#    SonarCloud: 'SonarCloud'
+#    organization: '<<<< TODO >>>>'
+#    scannerMode: 'MSBuild'
+#    projectKey: 'CarRent'
+#    projectName: 'CarRent'
 
 - task: DotNetCoreCLI@2
   inputs:
