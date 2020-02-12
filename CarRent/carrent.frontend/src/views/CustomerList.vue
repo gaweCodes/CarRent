@@ -101,9 +101,6 @@
       >
         <div class="col-md-3 form-group">
           <input class="form-control" type="text" readonly v-model="customer.id" />
-          <button type="button" class="btn btn-danger" @click="remove(customer.id)">
-            <em class="fas fa-trash" />&nbsp;Löschen
-          </button>
         </div>
         <div class="col-md-3 form-group">
           <input
@@ -134,6 +131,11 @@
             class="form-control"
             @input="update(customer)"
           />
+        </div>
+        <div class="col-md-2 form-group">
+          <button type="button" class="btn btn-danger form-control" @click="remove(customer.id)">
+            <em class="fas fa-trash" />&nbsp;Löschen
+          </button>
         </div>
       </div>
     </fieldset>

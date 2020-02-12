@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CarRent.Source.ReservationManagement.Domain;
 using CarRent.Source.ReservationManagement.Dtos;
 using CarRent.Source.ReservationManagement.SearchHelper;
 using CarRent.Source.ReservationManagement.Services.Interfaces;
@@ -88,8 +89,15 @@ namespace CarRent.Source.ReservationManagement.Api
         {
             try
             {
+                ReservationState? parsedState;
+                if (state == "Active")
+                    parsedState = ReservationState.Active;
+                else if (state == "Closed")
+                    parsedState = ReservationState.Closed;
+                else
+                    parsedState = null;
                 return await _reservationService.Search(new ReservationSearch
-                    {CarId = carId, CustomerId = customerId, State = state, TotalCost = totalCost});
+                    {CarId = carId, CustomerId = customerId, State = parsedState, TotalCost = totalCost});
             }
             catch (Exception e)
             {

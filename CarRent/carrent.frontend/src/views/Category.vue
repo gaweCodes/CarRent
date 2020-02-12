@@ -86,9 +86,6 @@
             @input="update(category)"
             class="form-control"
           />
-          <button type="button" class="btn btn-danger" @click="remove(category.id)">
-            <em class="fas fa-trash" />&nbsp; Löschen
-          </button>
         </div>
         <div class="col-md-6 form-group">
           <input
@@ -100,6 +97,11 @@
             @input="update(category)"
             class="form-control"
           />
+        </div>
+        <div class="col-md-2 form-group">
+          <button type="button" class="btn btn-danger form-control" @click="remove(category.id)">
+            <em class="fas fa-trash" />&nbsp;Löschen
+          </button>
         </div>
       </div>
     </fieldset>

@@ -135,9 +135,6 @@
               @input="update(carModel)"
               class="form-control"
             />
-            <button type="button" class="btn btn-danger" @click="remove(carModel.id)">
-              <em class="fas fa-trash" />&nbsp;Löschen
-            </button>
           </div>
           <div class="col-md-4 form-group">
             <select
@@ -168,6 +165,11 @@
                 :value="category.id"
               >{{category.name}}</option>
             </select>
+          </div>
+          <div class="col-md-2 form-group">
+            <button type="button" class="btn btn-danger form-control" @click="remove(carModel.id)">
+              <em class="fas fa-trash" />&nbsp;Löschen
+            </button>
           </div>
         </div>
       </fieldset>

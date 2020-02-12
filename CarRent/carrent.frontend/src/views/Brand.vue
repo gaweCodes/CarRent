@@ -66,7 +66,10 @@
             @input="update(brand)"
             class="form-control"
           />
-          <button type="button" class="btn btn-danger" @click="remove(brand.id)">
+        </div>
+        <div class="col-md-6 form-group"></div>
+        <div class="col-md-2 form-group">
+          <button type="button" class="btn btn-danger form-control" @click="remove(brand.id)">
             <em class="fas fa-trash" />&nbsp;Löschen
           </button>
         </div>

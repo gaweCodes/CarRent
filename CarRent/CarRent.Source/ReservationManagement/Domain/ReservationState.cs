@@ -2,7 +2,7 @@
 {
     public enum ReservationState
     {
-        Active = 2,
+        Active = 1,
         Closed = 2
     }
 }

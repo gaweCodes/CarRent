@@ -21,23 +21,10 @@
       <p>{{ brandRd.getError() }}</p>
     </alert>
     <loading
-      v-if="
-        carRd.isLoading() ||
-          carRd.isNotAsked() ||
-          modelRd.isLoading() ||
-          modelRd.isNotAsked() ||
-          brandRd.isLoading() ||
-          brandRd.isNotAsked() ||
-          categoryRd.isLoading() ||
-          categoryRd.isNotAsked() ||
-          reservationRd.isNotAsked() ||
-          reservationRd.isLoading() ||
-          customerRd.isNotAsked() || 
-          customerRd.isLoading()
-      "
+      v-if="carRd.isLoading() || carRd.isNotAsked() || modelRd.isLoading() || modelRd.isNotAsked() || brandRd.isLoading() || brandRd.isNotAsked() || categoryRd.isLoading() || categoryRd.isNotAsked() || reservationRd.isNotAsked() || reservationRd.isLoading() || customerRd.isNotAsked() || customerRd.isLoading()"
     />
     <div
-      v-if="carRd.hasData() &&
+      v-else-if="carRd.hasData() &&
           modelRd.hasData() &&
           brandRd.hasData() &&
           categoryRd.hasData() &&
@@ -88,11 +75,11 @@
                 title="Auto wählen"
                 class="form-control"
               >
-                <option v-for="car in buildCarOptions" :key="car.value" :value="car.value">
-                  {{
-                  car.text
-                  }}
-                </option>
+                <option
+                  v-for="car in buildCarOptions"
+                  :key="car.value"
+                  :value="car.value"
+                >{{car.text}}</option>
               </select>
               <br />
               <button type="button" class="btn btn-primary" @click="add">
@@ -101,7 +88,7 @@
             </fieldset>
           </div>
         </div>
-        <!--<div class="col-md-6">
+        <div class="col-md-6">
           <div class="form-group">
             <fieldset>
               <legend>Suche</legend>
@@ -111,14 +98,6 @@
                 class="form-control"
                 placeholder="Nach Dauer suchen"
               />
-              <br />
-              <select v-model="searchObject.carId" title="Nach Auto suchen" class="form-control">
-                <option v-for="car in buildCarOptions()" :key="car.value" :value="car.value">
-                  {{
-                  car.text
-                  }}
-                </option>
-              </select>
               <br />
               <select
                 v-model="searchObject.customerId"
@@ -132,33 +111,62 @@
                 >{{ customer.text }}</option>
               </select>
               <br />
+              <select
+                v-model="selectedSearchCategoryId"
+                title="Kategorie suchen"
+                class="form-control"
+              >
+                <option
+                  v-for="category in categoryRd.getData()"
+                  :key="category.id"
+                  :value="category.id"
+                >{{category.name}} - CHF {{category.dailyFee}} pro Tag</option>
+              </select>
+              <br />
+              <select v-model="searchObject.carId" title="Nach Auto suchen" class="form-control">
+                <option
+                  v-for="car in buildCarOptionsSearch"
+                  :key="car.value"
+                  :value="car.value"
+                >{{car.text}}</option>
+              </select>
+              <br />
+              <input
+                type="number"
+                v-model="searchObject.totalCost"
+                class="form-control"
+                placeholder="Nach Kosten suchen"
+              />
+              <br />
+              <select v-model="searchObject.state" title="Nach Status suchen" class="form-control">
+                <option value="Active">Aktiv</option>
+                <option value="Closed">Geschlossen</option>
+              </select>
+              <br />
               <button type="button" class="btn btn-primary" @click="search()">
                 <em class="fas fa-search" />&nbsp;Suchen
               </button>
             </fieldset>
           </div>
-        </div>-->
+        </div>
       </div>
       <br />
       <fieldset>
         <legend>Übersicht</legend>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-2">
             <label>Dauer</label>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-2">
             <label>Kosten</label>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-8">
             <label>Kunde</label>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-10">
             <label>Auto</label>
           </div>
-          <div class="col-md-4">
-            <label>Kategorie</label>
-          </div>
-          <div class="col-md-4">
+          <div class="col-md-2">
             <label>Status</label>
           </div>
         </div>
@@ -167,9 +175,9 @@
           :key="reservation.id"
           :class="idx % 2 === 0 ? 'row entry even' : 'row entry odd'"
         >
-          <div class="col-md-4 form-group">
+          <div class="col-md-2 form-group">
             <input
-              :id="reservation.id + 'Duration'"
+              :id="reservation.id + 'DurationInDays'"
               type="number"
               v-model="reservation.durationInDays"
               required
@@ -177,25 +185,66 @@
               class="form-control"
               @input="update(reservation)"
             />
-            <button type="button" class="btn btn-danger" @click="remove(reservation.id)">
+          </div>
+          <div class="col-md-2 form-group">
+            <input
+              :id="reservation.id + 'TotalCost'"
+              type="number"
+              v-model="reservation.totalCost"
+              readonly
+              class="form-control"
+            />
+          </div>
+          <div class="col-md-8 form-group">
+            <select
+              :id="reservation.id + 'CustomerId'"
+              required
+              v-model="reservation.customerId"
+              title="Kunde wählen"
+              class="form-control"
+              @change="update(reservation)"
+            >
+              <option
+                v-for="customer in buildCustomerOptions()"
+                :key="customer.value"
+                :value="customer.value"
+              >{{ customer.text }}</option>
+            </select>
+          </div>
+          <div class="col-md-10 form-group">
+            <select
+              :id="reservation.id + 'CarId'"
+              required
+              v-model="reservation.carId"
+              title="Auto wählen"
+              class="form-control"
+              @change="update(reservation)"
+            >
+              <option
+                v-for="car in buildChangeCarOptions"
+                :key="car.value"
+                :value="car.value"
+              >{{car.text}}</option>
+            </select>
+          </div>
+          <div class="col-md-2 form-group">
+            <input
+              :id="reservation.id + 'State'"
+              type="text"
+              v-model="reservation.state"
+              readonly
+              class="form-control"
+            />
+          </div>
+          <div class="col-md-2 form-group">
+            <button
+              type="button"
+              class="btn btn-danger form-control"
+              @click="remove(reservation.id)"
+            >
               <em class="fas fa-trash" />&nbsp;Löschen
             </button>
           </div>
-          <!--<div class="col-md-6 form-group">
-            <select
-              :id="car.id + 'Model'"
-              required
-              class="form-control"
-              v-model="car.carModelid"
-              @change="update(car)"
-            >
-              <option
-                v-for="model in buildModelOptions()"
-                :key="model.value"
-                :value="model.value"
-              >{{ model.text }}</option>
-            </select>
-          </div>-->
         </div>
       </fieldset>
     </div>
@@ -227,18 +276,60 @@ export default Vue.extend({
       reservationRd: RemoteData.notAsked<IReservation[], Error>(),
       newReservation: {} as IReservation,
       selectedCategoryId: '',
-      searchObject: {}
+      selectedSearchCategoryId: '',
+      searchObject: {
+        carId: undefined,
+        customerId: undefined,
+        totalCost: undefined,
+        durationInDays: undefined,
+        state: undefined
+      }
     };
   },
-  async created() {
-    await this.loadData();
+  created() {
+    this.loadData();
   },
   computed: {
-    buildCarOptions(): IDropdownOption[] {
-      const modelOptions = [] as IDropdownOption[];
-      const models = this.modelRd.getData().filter(x => x.categoryId === this.selectedCategoryId);
+    buildChangeCarOptions(): IDropdownOption[] {
+      const carOptions = [] as IDropdownOption[];
+      this.carRd.getData().forEach((car: ICar) => {
+        // @ts-ignore
+        const model = this.modelRd.getData().find(m => m.id === car.carModelid);
+        if (model === undefined) {
+          return;
+        }
+        const brand = this.brandRd.getData().find(x => x.id === model.brandId);
+        if (brand === undefined) {
+          return;
+        }
+        const category = this.categoryRd.getData().find(c => c.id === model.categoryId);
+        if (category === undefined) {
+          return;
+        }
+        carOptions.push({
+          value: car.id,
+          text:
+            car.carNumber +
+            ' - ' +
+            brand.title +
+            ' - ' +
+            model.title +
+            ' - ' +
+            category.name +
+            ' für CHF ' +
+            category.dailyFee +
+            ' / Tag'
+        } as IDropdownOption);
+      });
+      return carOptions;
+    },
+    buildCarOptionsSearch(): IDropdownOption[] {
+      const carOptions = [] as IDropdownOption[];
+      const models = this.modelRd
+        .getData()
+        .filter(x => x.categoryId === this.selectedSearchCategoryId);
       if (models.length === 0) {
-        return modelOptions;
+        return carOptions;
       }
 
       const cars = [] as ICar[];
@@ -251,6 +342,7 @@ export default Vue.extend({
         );
       });
       cars.forEach((car: ICar) => {
+        // @ts-ignore
         const model = models.find(m => m.id === car.carModelid);
         if (model === undefined) {
           return;
@@ -259,12 +351,45 @@ export default Vue.extend({
         if (brand === undefined) {
           return;
         }
-        modelOptions.push({
+        carOptions.push({
           value: car.id,
           text: car.carNumber + ' - ' + brand.title + ' - ' + model.title
         } as IDropdownOption);
       });
-      return modelOptions;
+      return carOptions;
+    },
+    buildCarOptions(): IDropdownOption[] {
+      const carOptions = [] as IDropdownOption[];
+      const models = this.modelRd.getData().filter(x => x.categoryId === this.selectedCategoryId);
+      if (models.length === 0) {
+        return carOptions;
+      }
+
+      const cars = [] as ICar[];
+      models.forEach((model: ICarModel) => {
+        cars.push(
+          ...this.carRd.getData().filter(c => {
+            // @ts-ignore
+            return c.carModelid === model.id;
+          })
+        );
+      });
+      cars.forEach((car: ICar) => {
+        // @ts-ignore
+        const model = models.find(m => m.id === car.carModelid);
+        if (model === undefined) {
+          return;
+        }
+        const brand = this.brandRd.getData().find(x => x.id === model.brandId);
+        if (brand === undefined) {
+          return;
+        }
+        carOptions.push({
+          value: car.id,
+          text: car.carNumber + ' - ' + brand.title + ' - ' + model.title
+        } as IDropdownOption);
+      });
+      return carOptions;
     }
   },
   methods: {
@@ -280,24 +405,28 @@ export default Vue.extend({
       }
       return customerOptions;
     },
-    async loadData() {
-      await this.loadCarData();
-      await this.loadCustomerData();
-      await this.loadModelData();
-      await this.loadBrands();
-      await this.loadCategories();
-      await axios
-        .get('/api/reservation')
-        .then(res => {
-          this.reservationRd = RemoteData.success<IReservation[], Error>(res.data);
-          console.log(this.reservationRd.getData());
-          if (this.categoryRd.getData().length > 0) {
-            this.selectedCategoryId = this.categoryRd.getData()[0].id;
-          }
-        })
-        .catch(e => {
-          this.reservationRd = RemoteData.failure<IReservation[], Error>(e);
+    loadData() {
+      this.loadBrands().then(() => {
+        this.loadCategories().then(() => {
+          this.loadModelData().then(() => {
+            this.loadCarData().then(() => {
+              this.loadCustomerData().then(() => {
+                axios
+                  .get('/api/reservation')
+                  .then(res => {
+                    this.reservationRd = RemoteData.success<IReservation[], Error>(res.data);
+                    if (this.categoryRd.getData().length > 0) {
+                      this.selectedCategoryId = this.categoryRd.getData()[0].id;
+                    }
+                  })
+                  .catch(e => {
+                    this.reservationRd = RemoteData.failure<IReservation[], Error>(e);
+                  });
+              });
+            });
+          });
         });
+      });
     },
     async loadCustomerData() {
       await axios
@@ -364,44 +493,434 @@ export default Vue.extend({
       await axios.post('/api/reservation', this.newReservation);
       this.newReservation = {} as IReservation;
       this.loadData();
-    }
-    /*async update(updateObj: ICarModel) {
+    },
+    async update(updateObj: IReservation) {
       if (
-        (document.getElementById(updateObj.id + 'Number') as HTMLFormElement).reportValidity() ===
-          false ||
-        (document.getElementById(updateObj.id + 'Model') as HTMLFormElement).reportValidity() ===
+        (document.getElementById(
+          updateObj.id + 'DurationInDays'
+        ) as HTMLFormElement).reportValidity() === false ||
+        (document.getElementById(
+          updateObj.id + 'CustomerId'
+        ) as HTMLFormElement).reportValidity() === false ||
+        (document.getElementById(updateObj.id + 'CarId') as HTMLFormElement).reportValidity() ===
           false
       ) {
         return;
       }
-      await axios.put('/api/car', updateObj);
+      updateObj.durationInDays = Number(updateObj.durationInDays);
+      await axios.put('/api/reservation', updateObj);
+      this.loadData();
     },
     async remove(id: string) {
-      await axios.delete('/api/car/' + id);
+      await axios.delete('/api/reservation/' + id);
       this.loadData();
     },
     search() {
       let query = '';
-      if (this.searchObject.carNumber && !this.searchObject.carModelId) {
-        query = '?carNumber=' + this.searchObject.carNumber;
-      } else if (!this.searchObject.carNumber && this.searchObject.carModelId) {
-        query = '?carModelId=' + this.searchObject.carModelId;
-      } else if (this.searchObject.carNumber && this.searchObject.carModelId) {
+      if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query = '?durationInDays=' + Number(this.searchObject.durationInDays);
+      } else if (
+        !this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query = '?customerId=' + this.searchObject.customerId;
+      } else if (
+        !this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query = '?carId=' + this.searchObject.carId;
+      } else if (
+        !this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query = '?totalCost=' + Number(this.searchObject.totalCost);
+      } else if (
+        !this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query = '?state=' + this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
         query =
-          '?carNumber=' +
-          this.searchObject.carNumber +
-          '&carModelId=' +
-          this.searchObject.carModelId;
+          '?curationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&customerId=' +
+          this.searchObject.customerId;
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?curationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&carId=' +
+          this.searchObject.carId;
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?curationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost);
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?curationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        !this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query = '?customerId=' + this.searchObject.customerId + '&carId=' + this.searchObject.carId;
+      } else if (
+        !this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?customerId=' +
+          this.searchObject.customerId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost);
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query = '?customerid=' + this.searchObject.customerId + '&state=' + this.searchObject.state;
+      } else if (
+        !this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?carId=' + this.searchObject.carId + '&totalCost=' + Number(this.searchObject.totalCost);
+      } else if (
+        !this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query = '?carId=' + this.searchObject.carId + '&state=' + this.searchObject.state;
+      } else if (
+        !this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?totalCost=' + Number(this.searchObject.totalCost) + '&state=' + this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?curationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&customerId=' +
+          this.searchObject.customerId +
+          '&carId=' +
+          this.searchObject.carId;
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?curationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&carId=' +
+          this.searchObject.carId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost);
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?curationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&customerId=' +
+          this.searchObject.customerId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost);
+      } else if (
+        !this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?customerId=' +
+          this.searchObject.customerId +
+          '&carId=' +
+          this.searchObject.carId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost);
+      } else if (
+        !this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?carid=' +
+          this.searchObject.carId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        !this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?customerId=' +
+          this.searchObject.customerId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        !this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?customerId=' +
+          this.searchObject.customerId +
+          '&carId=' +
+          this.searchObject.carId +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&carId=' +
+          this.searchObject.carId +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&customerId=' +
+          this.searchObject.customerId +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?customerId=' +
+          this.searchObject.customerId +
+          '&durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost);
+      } else if (
+        !this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?customerId=' +
+          this.searchObject.customerId +
+          '&carId=' +
+          this.searchObject.carId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        !this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&carId=' +
+          this.searchObject.carId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        !this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&customerId=' +
+          this.searchObject.customerId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        !this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&carId=' +
+          this.searchObject.carId +
+          '&customerId=' +
+          this.searchObject.customerId +
+          '&state=' +
+          this.searchObject.state;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        !this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&carId=' +
+          this.searchObject.carId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&customerId=' +
+          this.searchObject.customerId;
+      } else if (
+        this.searchObject.durationInDays &&
+        this.searchObject.customerId &&
+        this.searchObject.carId &&
+        this.searchObject.totalCost &&
+        this.searchObject.state
+      ) {
+        query =
+          '?durationInDays=' +
+          Number(this.searchObject.durationInDays) +
+          '&carId=' +
+          this.searchObject.carId +
+          '&totalCost=' +
+          Number(this.searchObject.totalCost) +
+          '&state=' +
+          this.searchObject.state +
+          '&customerId=' +
+          this.searchObject.customerId;
       }
       axios
-        .get('/api/car/search/' + query)
+        .get('/api/reservation/search/' + query)
         .then(res => {
-          this.carRd = RemoteData.success<ICar[], Error>(res.data);
+          this.reservationRd = RemoteData.success<IReservation[], Error>(res.data);
         })
         .catch(e => {
-          this.carRd = RemoteData.failure<ICar[], Error>(e);
+          this.reservationRd = RemoteData.failure<IReservation[], Error>(e);
         });
-    }*/
+    }
   }
 });
 </script>

@@ -65,7 +65,7 @@ namespace CarRent.Source.ReservationManagement.Services
         public async Task<List<ReservationDto>> Search(ReservationSearch search)
         {
             List<Reservation> reservationList;
-            if (string.IsNullOrWhiteSpace(search.State) && !search.CarId.HasValue && !search.CustomerId.HasValue &&
+            if (!search.State.HasValue && !search.CarId.HasValue && !search.CustomerId.HasValue &&
                 !search.TotalCost.HasValue && !search.DurationInDays.HasValue)
                 reservationList = await _repository.GetAllAsync();
             else

@@ -45,8 +45,8 @@ namespace CarRent.Source.ReservationManagement.Repositories
         public async Task<List<Reservation>> Search(ReservationSearch search)
         {
             var query = _dbContext.Reservations.AsNoTracking().AsQueryable();
-            if (!string.IsNullOrWhiteSpace(search.State))
-                query = query.Where(r => r.State.ToString().Contains(search.State, StringComparison.InvariantCultureIgnoreCase));
+            if (search.State.HasValue)
+                query = query.Where(r => r.State == search.State);
             if (search.CarId.HasValue)
                 query = query.Where(r => r.CarId == search.CarId.Value);
             if (search.DurationInDays.HasValue)

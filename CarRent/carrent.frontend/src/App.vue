@@ -1,6 +1,8 @@
 <template functional>
   <div id="app">
-    <div id="nav"><router-link to="/">Sachbearbeiter</router-link>&nbsp;|</div>
+    <div id="nav">
+      <router-link to="/">Sachbearbeiter</router-link>&nbsp;|
+    </div>
     <router-view />
   </div>
 </template>
@@ -28,9 +30,6 @@ fieldset {
 }
 legend {
   width: 105px;
-}
-button {
-  margin-top: 10px;
 }
 .entry {
   margin-bottom: 5px;

@@ -103,9 +103,6 @@
               class="form-control"
               @input="update(car)"
             />
-            <button type="button" class="btn btn-danger" @click="remove(car.id)">
-              <em class="fas fa-trash" />&nbsp;Löschen
-            </button>
           </div>
           <div class="col-md-6 form-group">
             <select
@@ -121,6 +118,11 @@
                 :value="model.value"
               >{{model.text}}</option>
             </select>
+          </div>
+          <div class="col-md-2 form-group">
+            <button type="button" class="btn btn-danger form-control" @click="remove(car.id)">
+              <em class="fas fa-trash" />&nbsp;Löschen
+            </button>
           </div>
         </div>
       </fieldset>
@@ -239,7 +241,7 @@ export default Vue.extend({
       this.newCar = {} as ICar;
       this.loadData();
     },
-    async update(updateObj: ICarModel) {
+    async update(updateObj: ICar) {
       if (
         (document.getElementById(updateObj.id + 'Number') as HTMLFormElement).reportValidity() ===
           false ||

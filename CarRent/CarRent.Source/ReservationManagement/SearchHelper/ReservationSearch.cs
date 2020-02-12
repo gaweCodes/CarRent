@@ -1,4 +1,5 @@
 ﻿using System;
+using CarRent.Source.ReservationManagement.Domain;
 
 namespace CarRent.Source.ReservationManagement.SearchHelper
 {
@@ -8,6 +9,6 @@ namespace CarRent.Source.ReservationManagement.SearchHelper
         public Guid? CustomerId { get; set; }
         public int? DurationInDays { get; set; }
         public decimal? TotalCost { get; set; }
-        public string State { get; set; }
+        public ReservationState? State { get; set; }
     }
 }
