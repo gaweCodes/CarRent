@@ -181,6 +181,7 @@
               type="number"
               v-model="reservation.durationInDays"
               required
+              :readonly="reservation.state === 'Closed'"
               :min="1"
               class="form-control"
               @input="update(reservation)"
@@ -199,6 +200,7 @@
             <select
               :id="reservation.id + 'CustomerId'"
               required
+              :readonly="reservation.state === 'Closed'"
               v-model="reservation.customerId"
               title="Kunde wählen"
               class="form-control"
@@ -215,6 +217,7 @@
             <select
               :id="reservation.id + 'CarId'"
               required
+              :readonly="reservation.state === 'Closed'"
               v-model="reservation.carId"
               title="Auto wählen"
               class="form-control"

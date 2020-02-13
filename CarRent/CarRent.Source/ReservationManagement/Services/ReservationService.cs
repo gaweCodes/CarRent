@@ -50,6 +50,8 @@ namespace CarRent.Source.ReservationManagement.Services
 
         public async Task UpdateAsync(ReservationDto obj)
         {
+            if (obj.State == ReservationState.Closed.ToString())
+                throw new InvalidOperationException("You can not update a contracted reservation");
             var reservation = Reservation.FromDto(obj);
             var car = await _carService.GetByIdAsync(reservation.CarId);
             var carModel = await _carModelService.GetByIdAsync(car.CarModelid);

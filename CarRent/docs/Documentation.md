@@ -167,16 +167,17 @@ SonarQube wurde zur Messung von Metriken eingesetzt, da wir dies einmal ausprobi
 
 # Risiken und technische Schulden
 
-Durch das Setzen von der Umgebungsvariabel "Development" wurde auf der Azure sichergestellt, dass Datenmanipulationen nicht permanent sind und mit Beispieldaten vorabgefült sind. Und bei einem Recycle der API zurückgesetzt werden. Durch setzen der Umgebungsvariabel "Production" wird Entity Framework als Persistentzschicht aktiviert. Da die Seite nicht geschützt ist, wollen wir so verhindern, dass unbefugte Manipulationen auf der Datenbank durchgeführt werden.  
-Durch die kurze Entwicklungszeit sind nur begrenzt Tests geschrieben.
+Durch die kurze Entwicklungszeit und den erwähnten fehlenden Berechnungen gibt es kein CD.
+Durch die kurze Entwicklungszeit sind nur begrenzt Tests geschrieben, es wurden ein paar Tests geschrieben, sodass man eine Auswertung machen kann.
 Für eine Erweiterung der Software sollte erst eine grosse Testabdeckung erreicht werden.
 Weiter sollte ein separates GUI für den Kunden entworfen werden, damit der Kunde nicht mehr über den Sachbearbeiter Autos reservieren kann.  
 Der Logging-Kontext ist zur Zeit noch nicht umgesetzt.
+Eine Erweitung des CI mit CD sollte noch eingeführt werden.
 
 # Glossar
 
 | Begriff          | Definition                                |
 | ---------------- | ----------------------------------------- |
-| Entity Framework | Object-Relationship Mapper für MSSQL      |
-| Material Design  | ist eine Designrichtlinie von Google      |
+| Entity Framework | Object-Relationship Mapper				   |
+| Bootstrap		   | ist eine Designrichtlinie				   |
 | Accessibility    | Bedienhilfe für beeinträchtigete Benutzer |
