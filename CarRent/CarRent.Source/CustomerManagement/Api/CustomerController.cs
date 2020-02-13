@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CarRent.Source.CustomerManagement.Dtos;
 using CarRent.Source.CustomerManagement.SearchHelper;
@@ -10,6 +11,7 @@ namespace CarRent.Source.CustomerManagement.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class CustomerController : Controller
     {
         private readonly ICustomerService _customerService;

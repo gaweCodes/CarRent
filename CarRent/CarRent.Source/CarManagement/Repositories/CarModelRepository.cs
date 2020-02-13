@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRent.Source.CarManagement.Domain;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Source.CarManagement.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class CarModelRepository : ICarModelRepository
     {
         private readonly CarRentDbContext _dbContext;

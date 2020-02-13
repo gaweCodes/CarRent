@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CarRent.Source.CarManagement.Dtos;
 using CarRent.Source.CarManagement.SearchHelper;
@@ -10,6 +11,7 @@ namespace CarRent.Source.CarManagement.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class CarModelController : Controller
     {
         private readonly ICarModelService _carModelService;

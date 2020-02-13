@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CarRent.Source.ReservationManagement.Domain;
 using CarRent.Source.ReservationManagement.Dtos;
@@ -11,6 +12,7 @@ namespace CarRent.Source.ReservationManagement.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class ReservationController : Controller
     {
         private readonly IReservationService _reservationService;

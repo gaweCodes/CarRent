@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using CarRent.Source.CarManagement.Domain;
 using CarRent.Source.CarManagement.Dtos;
@@ -31,6 +32,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRent.Source
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public IConfiguration Configuration { get; }

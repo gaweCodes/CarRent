@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRent.Source.ContractManagement.Repositories.Interfaces;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Source.ContractManagement.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class RentalContractRepository : IRentalContractRepository
     {
         private readonly CarRentDbContext _dbContext;

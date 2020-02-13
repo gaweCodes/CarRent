@@ -200,7 +200,7 @@
             <select
               :id="reservation.id + 'CustomerId'"
               required
-              :readonly="reservation.state === 'Closed'"
+              :disabled="reservation.state === 'Closed'"
               v-model="reservation.customerId"
               title="Kunde wählen"
               class="form-control"
@@ -217,7 +217,7 @@
             <select
               :id="reservation.id + 'CarId'"
               required
-              :readonly="reservation.state === 'Closed'"
+              :disabled="reservation.state === 'Closed'"
               v-model="reservation.carId"
               title="Auto wählen"
               class="form-control"

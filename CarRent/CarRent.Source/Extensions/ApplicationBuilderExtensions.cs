@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Builder;
 
 namespace CarRent.Source.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseSpaRouting(this IApplicationBuilder builder)

@@ -1,4 +1,5 @@
-﻿using CarRent.Source.CarManagement.Domain;
+﻿using System.Diagnostics.CodeAnalysis;
+using CarRent.Source.CarManagement.Domain;
 using CarRent.Source.ContractManagement.Domain;
 using CarRent.Source.CustomerManagement.Domain;
 using CarRent.Source.ReservationManagement.Domain;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarRent.Source.Database
 {
+    [ExcludeFromCodeCoverage]
     public class CarRentDbContext : DbContext
     {
         public CarRentDbContext(DbContextOptions options) : base(options) { }
