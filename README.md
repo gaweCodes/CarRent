@@ -18,4 +18,4 @@ The ZbW school project in Software Architecture and Design. Thsi repo contains T
 
 ## Documentation
 
-See https://github.com/gaweCodes/CarRent/blob/master/docs/Documentation.md
+See [Documentation]([https://link](https://github.com/gaweCodes/CarRent/blob/master/CarRent/docs/Documentation.md))
