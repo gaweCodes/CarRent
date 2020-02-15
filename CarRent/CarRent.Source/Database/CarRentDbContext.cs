@@ -28,7 +28,7 @@ namespace CarRent.Source.Database
             modelBuilder.Entity<Brand>(b => { b.HasMany<CarModel>().WithOne().OnDelete(DeleteBehavior.Restrict); });
             modelBuilder.Entity<CarModel>(c =>
             {
-                c.HasOne<CarCategory>().WithOne().HasForeignKey<CarModel>(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);
+                c.HasOne<CarCategory>().WithMany().OnDelete(DeleteBehavior.Restrict);
             });
             modelBuilder.Entity<RentalContract>(rc =>
             {

@@ -82,14 +82,14 @@ CarRent hat keine Schnittstellen zu Fremdsystemen wie z.B. Zahlungssystemen oder
 
 ## Fachlicher Kontext
 
-![Kontext Diagramm](./images/)
+![Kontext Diagramm](./images/SystemContext.png)
 
 Kunden benutzen in einer ersten Phase das CarRent System nur über einen Sachbearbeiter. Der Sachbearbeiter führt alle interaktionen mit dem CarRent-System über das WebFrontend.
 In einer späteren Phase erhalten die Kunden ein eigenes Benutzerinterface. In diese können sie dann selbstständig Autos reservieren.
 
 ## Technischer Kontext
 
-![Deployment Diagramm](./images/)
+![Component Diagramm](./images/ContainerDiagramm.png)
 
 Über ein WebBrowser wird via HTTPS auf den WebClient zugegriffen.
 Der WebClient macht seinerseitz Abragen über HTTPS auf die WebAPI.
@@ -111,7 +111,7 @@ Die folgende Tabelle stellt die Qualitätsziele von CarRent passenden Architektu
 
 ## Whitebox Gesamtsystem
 
-![Kompponenten Diagramm](./images)
+![Component Diagramm](./images/ComponentDiagramm.png)
 
 ### Enthaltene Bausteine
 
@@ -135,7 +135,7 @@ Eine Laufzeitsicht ist im Moment nicht dokumentiert, da kein komplexer Ablauf ge
 
 ## Infrastruktur Ebene
 
-![Deployment Diagramm](./images)
+![Deployment Diagramm](./images/ContainerDiagramm.png)
 
 **Begründung**
 
@@ -145,7 +145,7 @@ Die Vorgabe des Projekts war für die Infrastruktur entscheidend und musste wie 
 
 # Domänenkonzepte
 
-![Domain Diagramm](./images)
+![Domain Diagramm](./images/DomainModel.png)
 
 # Entwurfsentscheidungen
 
@@ -158,7 +158,7 @@ SonarQube wurde zur Messung von Metriken eingesetzt, da wir dies einmal ausprobi
 
 <dl>
 <dt>Codemetriken:</dt>
-<dd>Wir setzen auf die Qualitätsregeln welche in SonarQube standardmässig hinterlegt sind. Mit Ausnahme von Codecoverage, da wir nei so eine hohe Coverage erreichen können in diesem Projekt. SonarQube lässt den Build failen, wenn das Qualtygate nicht erreicht wird.</dd>
+<dd>Wir setzen auf die Qualitätsregeln welche in SonarQube standardmässig hinterlegt sind. Mit Ausnahme von Codecoverage, da wir nie so eine hohe Coverage erreichen können in diesem Projekt. SonarQube lässt den Build failen, wenn das Qualtygate nicht erreicht wird.</dd>
 <dt>Installierbarkeit</dt>
 <dd>Eine automatisches Deployment haben wir nur geplant. Wir können es aber nicht umsetzen. Weil uns da Berechtigungen Fehlen.</dd>
 <dt>Usability</dt>
@@ -178,6 +178,6 @@ Eine Erweitung des CI mit CD sollte noch eingeführt werden.
 
 | Begriff          | Definition                                |
 | ---------------- | ----------------------------------------- |
-| Entity Framework | Object-Relationship Mapper				   |
-| Bootstrap		   | ist eine Designrichtlinie				   |
+| Entity Framework | Object-Relationship Mapper                |
+| Bootstrap        | ist eine Designrichtlinie                 |
 | Accessibility    | Bedienhilfe für beeinträchtigete Benutzer |
