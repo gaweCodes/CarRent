@@ -49,6 +49,24 @@ Das Ziel ist eine Software, welche über Webclients gleichzeitig Fahrzeuge reser
 | Softwareentwickler  | T. Canal           | Klare Anforderungen                            |
 | Softwareentwickler  | G. Weibel          | Klare Anforderungen                            |
 
+## Use Cases
+<dl>
+<dt>UC 01: Kunden verwalten</dt>
+<dd>Der Sachbearbeiter muss Kunden erstellen, bearbeiten, löschen und suchen können.
+</dd>
+<dt>UC 02: Auto verwalten</dt>
+<dd>Der Sachbearbeiter muss Autos erstellen, bearbeiten, löschen und suchen können. Ausserdem muss die Autokategorie ausgewählt werden.
+</dd>
+<dt>UC 03: Autokategorien verwalten</dt>
+<dd>Der Sachbearbeiter muss die Autokategorie erstellen, bearbeiten, löschen und suchen können.</dd>
+<dt>UC 04: Reservation verwalten</dt>
+<dd>Sachbearbeiter als auch Kunden müssen Reservationen aufgrund einer gegebenen Klasse und einer bestimmten Laufzeit suchen, löschen, erstellen und ändern können.
+</dd>
+<dt>UC 05: Vertrag erstellen</dt>
+<dd>Bei Abholung des Autos wird automatisch ein Mietvertrag erstellt. Bei Rückgabe des Autos wird er abgeschlossen und verrechnet.
+</dd>
+</dl>
+
 # Randbedingungen
 
 <dl>

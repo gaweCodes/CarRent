@@ -240,7 +240,12 @@
             />
           </div>
           <div class="col-md-2 form-group">
-            <button type="button" class="btn btn-primary form-control" @click="pickUp(reservation)">
+            <button
+              :disabled="reservation.state === 'Closed'"
+              type="button"
+              class="btn btn-primary form-control"
+              @click="pickUp(reservation)"
+            >
               <em class="fas fa-truck" />&nbsp;Abholung
             </button>
           </div>
