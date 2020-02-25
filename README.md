@@ -16,6 +16,10 @@ The ZbW school project in Software Architecture and Design. Thsi repo contains T
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=gaweCodes_CarRent&metric=code_smells)](https://sonarcloud.io/project/issues?id=gaweCodes_CarRent&resolved=false&types=CODE_SMELL)
 [![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=gaweCodes_CarRent&metric=duplicated_lines_density)](https://sonarcloud.io/component_measures?id=gaweCodes_CarRent&metric=duplicated_lines_density)
 
+## Live
+
+See [CarRent](https://carrent-backend-gawe.azurewebsites.net/) live on azure.
+
 ## Documentation
 
 See [Documentation](https://github.com/gaweCodes/CarRent/blob/master/CarRent/docs/Documentation.md)
