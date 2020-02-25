@@ -23,6 +23,16 @@ Hruschka & Dr. Gernot Starke.
 
 ## Aufgabenstellung
 
+### Big Picture - Verkäufersicht
+
+* Kundendaten können erfasst, verwaltet und gesucht werden
+* Mit Hilfe des CarRent Systems ist es möglich den komplizierten und aufwändigen Geschäftsalltag einer Autovermietung an einem Ort einfach, zentral und schnell zu bewältigen. Zudem ist es möglich, dies auch von Unterwegs zu tun, denn das ganze läuft im Web.
+* Es sind 2 Typen von Benutzer vorhanden:
+    - Sachbearbeiter: Er verwaltet Kunden, Fahrzeuge und Mietanfragen.
+    - Kunde: Er kann auch selbstständig Fahrzeuge der gewünschten Klasse für einen bestimmten Zeitraum reservieren.
+* Sobald der Kunde das Fahrzeug abholt, wird ein Mietvertrag erstellt.
+
+
 ### Autovermietungssoftware CarRent
 
 CarRent ist die schnelle und einfache Art, ein Auto für den nächsten Trip zu reservieren.
@@ -140,7 +150,6 @@ Die folgende Tabelle stellt die Qualitätsziele von CarRent passenden Architektu
 <dd>Auto beinthält die Informationen zu den jeweiligen Autos. Ein Auto ist eine bestimmtem bestimmten Modell zugeordnet. Das Modell wiederum gehört zu einer Kategorie (Klasse) und einer Marke</dd>
 <dt>Reservations</dt>
 <dd>Eine Reservation benötigt ein Kunde, eine Autoklasse, dann ein spezifisches Auto. Dieses Auto wird dann für eine Anzahl Tage reserviert.</dd>
-</dl>
 <dt>Contracts</dt>
 <dd>Hier sind die Mietverträge enthalten. Sie treten dann in Kraft, wenn das Auto abgeholt wird.</dd>
 </dl>
