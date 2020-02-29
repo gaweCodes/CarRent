@@ -5,9 +5,8 @@ The ZbW school project in Software Architecture and Design. Thsi repo contains T
 - dot net core 3.1.1
 - pomelo mysql entity framework core 3.1.1
 
-## Azure DevOps Pipline
-
-[![Build Status](https://dev.azure.com/gabrielweibelhotmailde/CarRent/_apis/build/status/gaweCodes.CarRent?branchName=master)](https://dev.azure.com/gabrielweibelhotmailde/CarRent/_build/latest?definitionId=2&branchName=master)
+## Azure DevOps Pipline iCI/CD
+[![Build Status](https://dev.azure.com/gabrielweibel/CarRent/_apis/build/status/gaweCodes.CarRent?branchName=master)](https://dev.azure.com/gabrielweibel/CarRent/_build/latest?definitionId=1&branchName=master)
 
 ## SonarQube
 
@@ -18,7 +17,7 @@ The ZbW school project in Software Architecture and Design. Thsi repo contains T
 
 ## Live
 
-See [CarRent](https://carrent-backend-gawe.azurewebsites.net/) live on azure.
+See [CarRent](https://carrent-gawe.azurewebsites.net/) live on azure.
 
 ## Documentation
 

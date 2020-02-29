@@ -187,7 +187,7 @@ SonarQube wurde zur Messung von Metriken eingesetzt, da wir dies einmal ausprobi
 <dt>Codemetriken:</dt>
 <dd>Wir setzen auf die Qualitätsregeln welche in SonarQube standardmässig hinterlegt sind. Mit Ausnahme von Codecoverage, da wir nie so eine hohe Coverage erreichen können in diesem Projekt. SonarQube lässt den Build failen, wenn das Qualtygate nicht erreicht wird.</dd>
 <dt>Installierbarkeit</dt>
-<dd>Eine automatisches Deployment haben wir nur geplant. Wir können es aber nicht umsetzen. Weil uns da Berechtigungen Fehlen.</dd>
+<dd>Automatisches CI/CD ist mittels Azure DevOps, Azure Web App and GitHub umgesetzt.</dd>
 <dt>Usability</dt>
 <dd>Durch den Einsatz von Bootstrap Komponenten wird die Benutzerfreundlichkeit und Accessibility (Bedienbarkeit für beeinträchtigete Benutzer) automatisch unterstützt. </dd>
 </dl>
@@ -199,7 +199,6 @@ Durch die kurze Entwicklungszeit sind nur begrenzt Tests geschrieben, es wurden 
 Für eine Erweiterung der Software sollte erst eine grosse Testabdeckung erreicht werden.
 Weiter sollte ein separates GUI für den Kunden entworfen werden, damit der Kunde nicht mehr über den Sachbearbeiter Autos reservieren kann.  
 Der Logging-Kontext ist zur Zeit noch nicht umgesetzt.
-Eine Erweitung des CI mit CD sollte noch eingeführt werden.
 
 # Glossar
 
