@@ -33,3 +33,9 @@ steps:
     publishWebProjects: true
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Pay-As-You-Go(c67e63f9-c094-46ab-ae78-e56a2e6ddbc5)'
+    appType: 'webAppLinux'
+    appName: 'carrent-gawe'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
