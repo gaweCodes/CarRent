@@ -27,6 +27,9 @@ steps:
     projects: '**/*.csproj'
     testRunTitle: 'Tests'
 - task: SonarCloudAnalyze@1
+- task: Bash@3
+  inputs:
+    filePath: 'vueIntegr.sh'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
