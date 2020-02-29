@@ -27,3 +27,10 @@ steps:
     projects: '**/*.csproj'
     testRunTitle: 'Tests'
 - task: SonarCloudAnalyze@1
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Pay-As-You-Go(c67e63f9-c094-46ab-ae78-e56a2e6ddbc5)'
+    appType: 'webAppLinux'
+    WebAppName: 'carrent-gawe'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
