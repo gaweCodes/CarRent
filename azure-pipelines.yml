@@ -27,11 +27,15 @@ steps:
     projects: '**/*.csproj'
     testRunTitle: 'Tests'
 - task: SonarCloudAnalyze@1
-
-- task: AzureRmWebAppDeployment@4
+- task: DotNetCoreCLI@2
   inputs:
-    ConnectionType: 'AzureRM'
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+- task: AzureWebApp@1
+  inputs:
     azureSubscription: 'Pay-As-You-Go(c67e63f9-c094-46ab-ae78-e56a2e6ddbc5)'
     appType: 'webAppLinux'
-    WebAppName: 'carrent-gawe'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    appName: 'carrent-gawe'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
